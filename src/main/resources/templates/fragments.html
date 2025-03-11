@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<header th:fragment="header">
+    <nav class="navbar">
+        <h1><a href="Hovedside.html">BetterReads</a></h1>
+        <ul class="menu">
+            <a href="">Home</a>
+            <a href="">My Books</a>
+            <a href="">Browse</a>
+            <a href="Registrering.html">Register</a>
+            <a href="Loginn.html">Login</a>
+        </ul>
+        <search>
+            <form>
+                <label for="searchType">
+                    <select id="searchType">
+                        <option value="books">Books</option>
+                        <option value="authors">Authors</option>
+                    </select>
+                </label>
+                <label for="navsearch">
+                    <input id="navsearch" type="search" name="search" placeholder="Search...">
+                </label>
+            </form>
+        </search>
+    </nav>
+</header>
+</body>
+</html>

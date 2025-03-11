@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BetterReads</title>
+</head>
+<body>
+
+<div th:insert="~{fragments :: header}"></div>
+
+<header th:fragment="header">
+    <nav class="navbar">
+        <span>&#9776;</span>
+        <h1><a href="Hovedside.html">BetterReads</a></h1>
+        <div class="sidebar">
+            <ul class="menu">
+                <li><a href="">Home</a></li>
+                <li><a href="">My Books</a></li>
+                <li><a href="">Browse</a></li>
+            </ul>
+            <search>
+                <form>
+                    <label for="searchType">
+                        <select id="searchType">
+                            <option value="books">Books</option>
+                            <option value="authors">Authors</option>
+                        </select>
+                    </label>
+                    <label for="navsearch">
+                        <input id="navsearch" type="search" name="search" placeholder="Search...">
+                    </label>
+                </form>
+            </search>
+        </div>
+        <a href="Registrering.html">Register</a>
+        <a href="Loginn.html">Login</a>
+    </nav>
+</header>
+
+<p>goodreads but better</p>
+
+<div th:insert="~{fragments :: footer}"></div>
+<footer th:fragment="footer" class="footer">
+    <table>
+
+    </table>
+</footer>
+</body>
+</html><a href=""></a>
