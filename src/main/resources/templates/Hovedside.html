@@ -61,10 +61,10 @@
 <div class="top-picks">
     <h2>Top Picks</h2>
     <div class="scoll-container">
-        <button class="scroll-btn left" onclick="scrollLeft()">
-            <i class="material-symbols-outlined">chevron_left</i>
-        </button>
         <div class="liste">
+            <button class="scroll-btn left" onclick="scrollLeft()">
+                <i class="material-symbols-outlined">chevron_left</i>
+            </button>
             <!-- TODO lag denne listen -->
 
             <img th:each="book : ${books}" th:src="${book.coverURL}" th:alt="${book.title}">
@@ -80,10 +80,10 @@
             <img src="../static/images/covertemplate.jpg" alt="template">
             <img src="../static/images/covertemplate.jpg" alt="template">
             <img src="../static/images/covertemplate.jpg" alt="template">
+            <button class="scroll-btn right" onclick="scrollRight()">
+                <i class="material-symbols-outlined">chevron_right</i>
+            </button>
         </div>
-        <button class="scroll-btn right" onclick="scrollRight()">
-            <i class="material-symbols-outlined">chevron_right</i>
-        </button>
     </div>
 </div>
 <script>

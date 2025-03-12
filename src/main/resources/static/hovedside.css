@@ -5,11 +5,11 @@
 .searchbar-main {
     display: flex;
     align-items: center;
-    background: white; /* Adjust background */
+    background: white;
     border: 2px solid #ccc;
     border-radius: 8px;
     overflow: visible;
-    width: 30%; /* Adjust width */
+    width: 30%;
     min-width: 400px;
     margin: 0 auto;
 }
@@ -29,12 +29,12 @@
 }
 
 .searchbar-main input {
-    flex: 1; /* Makes input take up remaining space */
+    flex: 1;
 }
 
 .search-btn-main,
 .barcode-btn-main {
-    background: inherit; /* Change to preferred color */
+    background: inherit;
     color: #787878;
     border: none;
     padding: 0 0.8em;
@@ -68,7 +68,7 @@
 .scroll-container {
     position: relative;
     display: flex;
-    justify-content: center; /* Center horizontally */
+    justify-content: center;
     align-items: center;
     margin: 20px 0;
 }
@@ -76,18 +76,16 @@
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
-    gap: clamp(10px, 2vw, 30px); /* Responsive gap */
+    gap: clamp(10px, 2vw, 30px);
     padding: 15px 5px;
     width: 60%;
-    margin: 0 auto; /* Center the list */
+    margin: 0 auto;
 }
 .liste::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+    display: none;
 }
 .liste img {
-    height: clamp(200px, 40vh, 400px); /* Dynamic height based on viewport height */
+    height: 40vh;
     width: auto;
     flex: 0 0 auto;
     object-fit: cover;
@@ -108,15 +106,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 60%;
 }
+
 .scroll-btn.left {
-    left: calc(15%); /* Position relative to the list width */
+    left: calc(15%);
 }
 .scroll-btn.right {
-    right: calc(15%); /* Position relative to the list width */
+    right: calc(15%);
 }
 .material-symbols-outlined {
-    font-size: clamp(20px, 3vw, 32px); /* Dynamic icon size */
+    font-size: clamp(20px, 3vw, 32px);
 }
