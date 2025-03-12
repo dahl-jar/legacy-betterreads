@@ -1,0 +1,64 @@
+.searchbar-container h2 {
+    text-align: center;
+}
+.searchbar-main {
+    display: flex;
+    align-items: center;
+    background: white; /* Adjust background */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    overflow: visible;
+    width: 30%; /* Adjust width */
+    min-width: 400px;
+    margin: 0 auto;
+}
+
+.searchbar-main select,
+.searchbar-main input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.searchbar-main select {
+    background: #f0f0f0;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.searchbar-main input {
+    flex: 1; /* Makes input take up remaining space */
+}
+
+.search-btn-main,
+.barcode-btn-main {
+    background: inherit; /* Change to preferred color */
+    color: #787878;
+    border: none;
+    padding: 0 0.8em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-separator {
+    width: 0.1em;
+    height: 1em;
+    background-color: black;
+}
+
+.search-btn-main:hover,
+.barcode-btn-main:hover {
+    color: #000000;
+}
+
+.search-btn-main i,
+.barcode-btn-main i {
+    font-size: 20px;
+}
+
+.top-picks {
+    text-align: center;
+}
