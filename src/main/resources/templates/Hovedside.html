@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>BetterReads</title>
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=barcode_scanner,more_vert,qr_code_scanner,search"/>
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap"/>
     <link rel="stylesheet" href="../static/styles.css">
     <link rel="stylesheet" href="../static/footer.css">
     <link rel="stylesheet" href="../static/hovedside.css">
@@ -60,8 +60,49 @@
 
 <div class="top-picks">
     <h2>Top Picks</h2>
+    <div class="scoll-container">
+        <button class="scroll-btn left" onclick="scrollLeft()">
+            <i class="material-symbols-outlined">chevron_left</i>
+        </button>
+        <div class="liste">
+            <!-- TODO lag denne listen -->
 
+            <img th:each="book : ${books}" th:src="${book.coverURL}" th:alt="${book.title}">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+        </div>
+        <button class="scroll-btn right" onclick="scrollRight()">
+            <i class="material-symbols-outlined">chevron_right</i>
+        </button>
+    </div>
 </div>
+<script>
+    function scrollLeft() {
+        document.querySelector(".liste").scrollBy({ left: -350, behavior: "smooth" });  /* Increased from 300 to 350 */
+    }
+
+    function scrollRight() {
+        document.querySelector(".liste").scrollBy({ left: 350, behavior: "smooth" });   /* Increased from 300 to 350 */
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const leftBtn = document.querySelector(".scroll-btn.left");
+        const rightBtn = document.querySelector(".scroll-btn.right");
+
+        leftBtn.addEventListener('click', scrollLeft);
+        rightBtn.addEventListener('click', scrollRight);
+    });
+</script>
 
 <div th:insert="~{fragments :: footer}"></div>
 <footer th:fragment="footer" class="footer">
