@@ -11,6 +11,7 @@
     <groupId>com.br</groupId>
     <artifactId>BetterReads</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>BetterReads</name>
     <description>BetterReads</description>
     <url/>
@@ -69,6 +70,12 @@
             <artifactId>mockito-core</artifactId>
             <version>5.14.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
