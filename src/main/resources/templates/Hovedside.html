@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>BetterReads</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap"/>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/footer.css">
+    <link rel="stylesheet" href="../static/hovedside.css">
 </head>
 <body>
 
@@ -14,21 +19,17 @@
         <h1><a href="Hovedside.html">BetterReads</a></h1>
         <div class="sidebar">
             <ul class="menu">
-                <li><a href="">Home</a></li>
+                <li><a href="Hovedside.html">Home</a></li>
                 <li><a href="">My Books</a></li>
                 <li><a href="">Browse</a></li>
             </ul>
-            <search>
+            <search class="searchbar-nav">
                 <form>
-                    <label for="searchType">
-                        <select id="searchType">
-                            <option value="books">Books</option>
-                            <option value="authors">Authors</option>
-                        </select>
-                    </label>
-                    <label for="navsearch">
-                        <input id="navsearch" type="search" name="search" placeholder="Search...">
-                    </label>
+                    <select aria-label="Search Filter Navbar" id="searchTypeNav">
+                        <option value="books">Books</option>
+                        <option value="authors">Authors</option>
+                    </select>
+                    <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
                 </form>
             </search>
         </div>
@@ -37,13 +38,95 @@
     </nav>
 </header>
 
-<p>goodreads but better</p>
+<h1>goodreads but better</h1>
+
+<div class="searchbar-container">
+    <h2>Find your next book</h2>
+    <div class="searchbar-main">
+        <select name="searchtype" id="typeSearch" aria-label="Search filter main">
+            <option value="title">Title</option>
+            <option value="author">Author</option>
+        </select>
+        <input aria-label="Search bar main" type="search" id="main-search" name="searchmain" placeholder="Search ...">
+        <button class="search-btn-main" type="submit">
+            <i class="material-symbols-outlined">search</i>
+        </button>
+        <div class="button-separator"></div>
+        <button class="barcode-btn-main">
+            <i class="material-symbols-outlined">barcode_scanner</i>
+        </button>
+    </div>
+</div>
+
+<div class="top-picks">
+    <h2>Top Picks</h2>
+    <div class="scoll-container">
+        <div class="liste">
+            <button class="scroll-btn left" onclick="scrollLeft()">
+                <i class="material-symbols-outlined">chevron_left</i>
+            </button>
+            <!-- TODO lag denne listen -->
+
+            <img th:each="book : ${books}" th:src="${book.coverURL}" th:alt="${book.title}">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <img src="../static/images/covertemplate.jpg" alt="template">
+            <button class="scroll-btn right" onclick="scrollRight()">
+                <i class="material-symbols-outlined">chevron_right</i>
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    function scrollLeft() {
+        document.querySelector(".liste").scrollBy({ left: -350, behavior: "smooth" });  /* Increased from 300 to 350 */
+    }
+
+    function scrollRight() {
+        document.querySelector(".liste").scrollBy({ left: 350, behavior: "smooth" });   /* Increased from 300 to 350 */
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const leftBtn = document.querySelector(".scroll-btn.left");
+        const rightBtn = document.querySelector(".scroll-btn.right");
+
+        leftBtn.addEventListener('click', scrollLeft);
+        rightBtn.addEventListener('click', scrollRight);
+    });
+</script>
 
 <div th:insert="~{fragments :: footer}"></div>
 <footer th:fragment="footer" class="footer">
-    <table>
-
-    </table>
+    <div class="footer-container">
+        <div class="footer-header">
+            <h1><span class="skinny">better</span><span class="fat">reads</span></h1>
+        </div>
+        <div class="footer-section">
+            <h3>About us</h3>
+            <p>...</p>
+        </div>
+        <div class="footer-section">
+            <h3>Help</h3>
+            <p>...</p>
+        </div>
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>...</p>
+        </div>
+        <div class="media"></div>
+    </div>
+    <div class="copyright">
+        <p>&copy; 2025 BetterReads. All rights reserved.</p>
+    </div>
 </footer>
 </body>
-</html><a href=""></a>
+</html>

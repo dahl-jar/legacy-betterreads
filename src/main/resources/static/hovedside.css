@@ -1,0 +1,120 @@
+.searchbar-container h2 {
+    text-align: center;
+}
+
+.searchbar-main {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    overflow: visible;
+    width: 30%;
+    min-width: 400px;
+    margin: 0 auto;
+}
+
+.searchbar-main select,
+.searchbar-main input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.searchbar-main select {
+    background: #f0f0f0;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.searchbar-main input {
+    flex: 1;
+}
+
+.search-btn-main,
+.barcode-btn-main {
+    background: inherit;
+    color: #787878;
+    border: none;
+    padding: 0 0.8em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-separator {
+    width: 0.1em;
+    height: 1em;
+    background-color: black;
+}
+
+.search-btn-main:hover,
+.barcode-btn-main:hover {
+    color: #000000;
+}
+
+.search-btn-main i,
+.barcode-btn-main i {
+    font-size: 20px;
+}
+.top-picks {
+    text-align: center;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.scroll-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+.liste {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: clamp(10px, 2vw, 30px);
+    padding: 15px 5px;
+    width: 60%;
+    margin: 0 auto;
+}
+.liste::-webkit-scrollbar {
+    display: none;
+}
+.liste img {
+    height: 40vh;
+    width: auto;
+    flex: 0 0 auto;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+.liste img:hover {
+    transform: scale(1.05);
+}
+.scroll-btn {
+    position: absolute;
+    z-index: 10;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 60%;
+}
+
+.scroll-btn.left {
+    left: calc(15%);
+}
+.scroll-btn.right {
+    right: calc(15%);
+}
+.material-symbols-outlined {
+    font-size: clamp(20px, 3vw, 32px);
+}
