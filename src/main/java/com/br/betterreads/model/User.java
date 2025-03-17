@@ -11,75 +11,75 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "User_id")
+    @Column(name = "user_id")
     private int userId;
 
     @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50)
-    @Column(name = "Username", nullable = false)
+    @Size(min = 3, max = 50, message = "Username needs to be at least 3 characters long")
     private String username;
 
     @NotBlank(message = "Email is required")
-    @Column(name = "Email")
+    @Email(message = "Please provide a valid email address")
     private String email;
 
-    @NotNull
-    @Column(name = "Salt_Password", nullable = false)
-    private String saltPassword;
+    @Transient
+    private String password;
 
-    @NotNull
-    @Column(name = "Hashed_Password", nullable = false)
-    private String hashedPassword;
+    @Transient
+    private String repeatPassword;
 
-    @NotNull
-    @Column(name = "Created_at", nullable = false)
+    @Column(name = "encoded_password", nullable = false)
+    private String encodedPassword;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public User(String username, String email, String encodedPassword) {
+        this.username = username;
+        this.email = email;
+        this.encodedPassword = encodedPassword;
+        createdAt = LocalDateTime.now();
+    }
+
+    public User() {}
 
     public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public @NotBlank(message = "Username is required") String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(@NotBlank(message = "Username is required") String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public @NotBlank(message = "Email is required") String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NotBlank(message = "Email is required") String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getSalt_Password() {
-        return saltPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSalt_Password(String saltPassword) {
-        this.saltPassword = saltPassword;
+    public String getRepeatPassword() {
+        return repeatPassword;
     }
 
     public String getHashed_Password() {
-        return hashedPassword;
+        return encodedPassword;
     }
 
     public void setHashed_Password(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+        this.encodedPassword = hashedPassword;
     }
 
     public LocalDateTime getCreated_at() {
         return createdAt;
-    }
-
-    public void setCreated_at(LocalDateTime created_at) {
-        createdAt = created_at;
     }
 }
