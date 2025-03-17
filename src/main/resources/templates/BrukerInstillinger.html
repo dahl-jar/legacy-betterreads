@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="no">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innstillinger</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="settings-container">
+    <h2>Innstillinger</h2>
 
+    <div class="setting-item">
+        <label for="username">Brukernavn:</label>
+        <input type="text" id="username" value="Brukernavn123">
+    </div>
+
+    <div class="setting-item">
+        <label for="email">E-post:</label>
+        <input type="email" id="email" value="bruker@example.com">
+    </div>
+
+    <div class="setting-item">
+        <label for="notifications">Varsler:</label>
+        <select id="notifications">
+            <option value="all">Alle varsler</option>
+            <option value="email">Kun e-post</option>
+            <option value="none">Ingen varsler</option>
+        </select>
+    </div>
+
+    <div class="setting-item">
+        <label for="theme">Tema:</label>
+        <select id="theme">
+            <option value="light">Lyst tema</option>
+            <option value="dark">Mørkt tema</option>
+        </select>
+    </div>
+
+    <button class="save-button">Lagre endringer</button>
+</div>
 </body>
 </html>
