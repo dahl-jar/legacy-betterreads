@@ -5,136 +5,286 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a book in the BetterReads application.
+ *
+ * This entity stores book details such as title, author, ISBN, and genre.
+ * It also tracks the book's synchronization status with external systems.
+ */
 @Entity
 @Table(name = "Book")
 public class Book {
 
-
+    /**
+     * Unique identifier for the book (Auto-generated).
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Book_id")
-    private int book_id;
+    private Long bookId;
 
+    /**
+     * External API identifier for the book.
+     */
     @NotNull
     @Column(name = "Api_id", nullable = false)
-    private int api_id;
+    private int apiId;
 
+    /**
+     * Title of the book.
+     */
     @NotNull
     @Column(name = "Title", nullable = false)
     private String title;
 
+    /**
+     * Author of the book.
+     */
     @NotNull
     @Column(name = "Author", nullable = false)
     private String author;
 
+    /**
+     * ISBN (International Standard Book Number) for the book.
+     *
+     * Must be exactly 13 characters long to ensure valid ISBN format.
+     */
     @NotNull(message = "Field is required")
     @Size(min = 13, max = 13, message = "ISBN must be exactly size 13")
     @Column(name = "ISBN", nullable = false, unique = true)
-    private String ISBN;
+    private String isbn;
 
+    /**
+     * Description of the book's content.
+     */
+    @Column(name = "Description")
     private String description;
 
+    /**
+     * Genre of the book (e.g., Fiction, Mystery, etc.).
+     */
     @Column(name = "genre")
-    private String Genre;
+    private String genre;
 
+    /**
+     * URL to the book's cover image.
+     */
     @NotNull
-    @Column(name = "Cover_URL")
+    @Column(name = "Cover_URL", nullable = false)
     private String coverURL;
 
+    /**
+     * The timestamp of the last successful synchronization with external systems.
+     */
     @NotNull(message = "Field is required")
+    @Column(name = "Last_Sync", nullable = false)
     private LocalDateTime lastSync;
 
 
-    //Constructors
-    public Book(){
+    // Constructors
 
-    }
 
-    public Book(int Bok_id, int Api_id, String title, String author,
-                String ISBN, String Cover_URL, LocalDateTime lastSync){
-        this.book_id = Bok_id;
-        this.api_id = Api_id;
+    /**
+     * Default constructor required by JPA.
+     */
+    public Book() {}
+
+    /**
+     * Constructor to initialize a new Book object.
+     *
+     * @param apiId External API identifier for the book.
+     * @param title Title of the book.
+     * @param author Author of the book.
+     * @param isbn ISBN for the book (13 characters).
+     * @param coverURL URL of the book's cover.
+     * @param lastSync Timestamp of the last synchronization.
+     */
+    public Book(int apiId, String title, String author,
+                String isbn, String coverURL, LocalDateTime lastSync) {
+        this.apiId = apiId;
         this.title = title;
         this.author = author;
-        this.ISBN = ISBN;
-        this.coverURL = Cover_URL;
+        this.isbn = isbn;
+        this.coverURL = coverURL;
         this.lastSync = lastSync;
     }
 
-    //Getters and setters
-    public int getBook_id(){
-        return book_id;
+    @PrePersist
+    protected void onCreate(){
+        this.lastSync = LocalDateTime.now();
     }
 
-    public void setBook_id(int Bok_id){
-        this.book_id = Bok_id;
-    }
-    
-    public int getApi_id(){
-        return api_id;
+
+    // Getters and Setters
+
+
+    /**
+     * Retrieves the unique identifier for the book.
+     *
+     * @return The book's ID.
+     */
+    public Long getBookId() {
+        return bookId;
     }
 
-    public void setApi_id(int Api_id){
-        this.api_id = Api_id;
+    /**
+     * Retrieves the external API ID for the book.
+     *
+     * @return The book's API ID.
+     */
+    public int getApiId() {
+        return apiId;
     }
 
-    public String getTittel(){
+    /**
+     * Sets the external API ID for the book.
+     *
+     * @param apiId The new API ID to assign.
+     */
+    public void setApiId(int apiId) {
+        this.apiId = apiId;
+    }
+
+    /**
+     * Retrieves the book's title.
+     *
+     * @return The book's title.
+     */
+    public String getTitle() {
         return title;
     }
 
-    public void setTittel(String Tittel){
-        this.title = Tittel;
+    /**
+     * Sets the book's title.
+     *
+     * @param title The new title to assign.
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getAuthor(){
+    /**
+     * Retrieves the author of the book.
+     *
+     * @return The book's author.
+     */
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String Forfatter){
-        this.author = Forfatter;
+    /**
+     * Sets the author of the book.
+     *
+     * @param author The new author to assign.
+     */
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public String getISBN(){
-        return ISBN;
+    /**
+     * Retrieves the ISBN of the book.
+     *
+     * @return The ISBN (13 characters).
+     */
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN){
-        this.ISBN = ISBN;
+    /**
+     * Sets the ISBN for the book.
+     *
+     * @param isbn The new ISBN to assign (must be exactly 13 characters).
+     */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getCoverURL(){
-        return coverURL;
-    }
-
-    public void setCoverURL(String Cover_URL){
-        this.coverURL = Cover_URL;
-    }
-
-    public LocalDateTime getSist_Synced(){
-        return lastSync;
-    }
-
-    public void setSist_Synced(LocalDateTime Sist_synced){
-        this.lastSync = Sist_synced;
-    }
-
-    public void setLastSync(LocalDateTime now) {
-        this.lastSync = now;
-    }
-
-    public String getDescription(){
+    /**
+     * Retrieves the book's description.
+     *
+     * @return The description of the book.
+     */
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description){
+    /**
+     * Sets the description of the book.
+     *
+     * @param description The new description to assign.
+     */
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setGenre (String Genre){
-        this.Genre = Genre;
+    /**
+     * Retrieves the book's genre.
+     *
+     * @return The book's genre.
+     */
+    public String getGenre() {
+        return genre;
     }
 
-    public String getGenre(){
-        return Genre;
+    /**
+     * Sets the genre of the book.
+     *
+     * @param genre The new genre to assign.
+     */
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
+
+    /**
+     * Retrieves the URL of the book's cover image.
+     *
+     * @return The URL of the book's cover.
+     */
+    public String getCoverURL() {
+        return coverURL;
+    }
+
+    /**
+     * Sets the URL of the book's cover image.
+     *
+     * @param coverURL The new URL to assign.
+     */
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
+    }
+
+    /**
+     * Retrieves the timestamp of the book's last synchronization.
+     *
+     * @return The timestamp of the last sync.
+     */
+    public LocalDateTime getLastSync() {
+        return lastSync;
+    }
+
+    /**
+     * Sets the timestamp of the book's last synchronization.
+     *
+     * @param lastSync The new timestamp to assign.
+     */
+    public void setLastSync(LocalDateTime lastSync) {
+        this.lastSync = lastSync;
+    }
+
+    //toString
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", apiId=" + apiId +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", description='" + description + '\'' +
+                ", genre='" + genre + '\'' +
+                ", coverURL='" + coverURL + '\'' +
+                ", lastSync=" + lastSync +
+                '}';
+    }
+
 }
