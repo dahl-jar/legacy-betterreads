@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"    lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>User Profile</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-
 </head>
 <body>
-<h2><span th:text="${user.username}"></span></h2>
+<div class="container">
+    <h2>Welcome, <span th:text="${user?.username ?: 'Guest'}"></span>!</h2>
+
+    <img th:src="${user?.profilePictureUrl ?: '/images/default-profile.png'}"
+         alt="Profile Picture"
+         class="profile-pic">
+
+    <p><strong>Bio:</strong> <span th:text="${user?.bio ?: 'No bio available'}"></span></p>
+
+
+    <p><strong>Total Reviews:</strong> <span th:text="${user?.totalReviews ?: 0}"></span></p>
+
+
+    <p><strong>Joined:</strong> <span th:text="${#dates.format(user?.joinDate, 'MMMM dd, yyyy') ?: 'Unknown'}"></span></p>
+
+</div>
 
 
 </body>
