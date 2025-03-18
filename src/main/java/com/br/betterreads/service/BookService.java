@@ -1,0 +1,28 @@
+package com.br.betterreads.service;
+
+import com.br.betterreads.model.Book;
+import com.br.betterreads.repository.BookRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+class BookService {
+
+    private final BookRepository bookRepo;
+
+    public BookService(BookRepository bookRepo) {
+        this.bookRepo = bookRepo;
+    }
+
+    public List<Book> fetchTrending() {
+        String query = "https://openlibrary.org/trending/monthly.json";
+
+
+
+
+        return new ArrayList<>();
+    }
+
+}

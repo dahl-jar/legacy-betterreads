@@ -8,6 +8,33 @@
 </head>
 
 <body>
+<div th:insert="~{fragments :: header}"></div>
+
+<header th:fragment="header">
+    <nav class="navbar">
+        <span>&#9776;</span>
+        <h1><a href="Hovedside.html">BetterReads</a></h1>
+        <div class="sidebar">
+            <ul class="menu">
+                <li><a href="Hovedside.html">Home</a></li>
+                <li><a href="">My Books</a></li>
+                <li><a href="">Browse</a></li>
+            </ul>
+            <search class="searchbar-nav">
+                <form>
+                    <select aria-label="Search Filter Navbar" id="searchTypeNav">
+                        <option value="books">Books</option>
+                        <option value="authors">Authors</option>
+                    </select>
+                    <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
+                </form>
+            </search>
+        </div>
+        <a href="Signup.html">Register</a>
+        <a href="Login.html">Login</a>
+    </nav>
+</header>
+
 
 <h1><a href="Bok.html">Book</a></h1>
 
@@ -42,5 +69,15 @@
 <label for="pname">Handling</label>
 <input type="text" id = "pname" name="Handling">
 
+<div>
+    <label for ="bookStatus">Book status:</label>
+    <select id = bookStatus name ="bookStatus">
+            <option value ="read">Read</option>
+            <option value="Currently reading">Currently reading</option>
+            <option value="to-read">to-read</option>
+
+    </select>
+
+</div>
 </body>
 </html>

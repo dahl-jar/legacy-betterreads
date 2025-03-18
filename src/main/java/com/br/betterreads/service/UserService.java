@@ -3,10 +3,13 @@ package com.br.betterreads.service;
 import com.br.betterreads.model.User;
 import com.br.betterreads.model.ValidationResult;
 import com.br.betterreads.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,4 +44,43 @@ public class UserService {
         userRepo.save(newUser);
         return ValidationResult.success();
     }
+
+    public ValidationResult validateUser(String email, String password, HttpSession session){
+
+        if(email == null || email.trim().isEmpty()){
+            return ValidationResult.error("Email cannot be empty");
+        }
+
+        if(password == null || password.trim().isEmpty()){
+            return ValidationResult.error("Password cannot be empty");
+        }
+
+        Optional<User> userOptional = userRepo.findByEmail(email);
+
+        if(userOptional.isEmpty()){
+            return ValidationResult.error("No account with this email");
+        }
+
+        if(!userOptional.get().getHashed_Password().equals(password)){
+            return ValidationResult.error("Incorrect password");
+        }
+
+        session.setAttribute("loggedInUser", userOptional.get());
+
+        return ValidationResult.success();
+
+
+
+
+    }
+
+    public void logoutUser(HttpSession session){
+            session.invalidate();
+    }
+
+    public User getLoggedInUser(HttpSession session){
+        return (User) session.getAttribute("loggedInUser");
+    }
+
+
 }

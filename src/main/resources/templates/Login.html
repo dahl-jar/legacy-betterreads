@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Logg inn</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="../static/login.css">
 
 </head>
 <body>
+
 <div class="container">
-    <form class="signin-form">
-        <h2>Logg inn</h2>
+    <h2>Logg inn</h2>
+    <form class="signin-form" th:action="/login" method="POST" th:object="${user}">
+        <div th:if="${error}">
+            <p th:text="${error}"></p>
+        </div>
+
         <div class="input-group">
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Enter your email" required>
-
+            <div th:if="${#fields.hasErrors('email')}" class="error-text" th:errors="*{email}"></div>
         </div>
         <div class="input-group">
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter your password" required>
-
+            <div th:if="${#fields.hasErrors('password')}" class="error-text" th:errors="*{password}"></div>
         </div>
         <button type="submit">Logg inn</button>
-        <p class ="register-link">No account? <a href="Signup.html"></a></p>
-        
-
-
+        <a href="Signup.html"><p class ="register-link">No account?</p></a>
     </form>
-
 </div>
 
 </body>

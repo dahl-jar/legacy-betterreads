@@ -12,12 +12,12 @@ public class BookMapper {
 
     public Book convertToBook(OpenLibraryApi dto, String isbn) {
         Book book = new Book();
-        book.setTittel(dto.getTitle());
+        book.setTitle(dto.getTitle());
         book.setAuthor(formatAuthors(dto.getAuthors()));
-        book.setISBN(isbn);
+        book.setIsbn(isbn);
         book.setCoverURL(dto.getCover() != null ? dto.getCover().getMedium() : null);
         book.setDescription(dto.getDescription());
-        book.setGenre(formatSubjects(dto.getSubjects()));
+        book.setGenre(formatSubjects(dto.getGenre()));
         book.setLastSync(java.time.LocalDateTime.now());
         return book;
     }

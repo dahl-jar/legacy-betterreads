@@ -118,3 +118,7 @@
 .material-symbols-outlined {
     font-size: clamp(20px, 3vw, 32px);
 }
+
+#underHeader{
+    text-align: center;
+}

@@ -3,6 +3,7 @@ package com.br.betterreads.controller;
 import com.br.betterreads.model.User;
 import com.br.betterreads.model.ValidationResult;
 import com.br.betterreads.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +45,46 @@ public class UserController {
         }
 
         return "redirect:/Login";
+    }
+
+    @GetMapping("/login")
+    public String showLoginForm(Model model){
+        model.addAttribute("user", new User());
+        return "Login";
+    }
+
+    @PostMapping("/login")
+    public String processLogin(@Valid @ModelAttribute("user") User user,
+                               Model model,
+                               BindingResult bindingResult,
+                               HttpSession session){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("error", "Invalid input");
+            return "/login";
+        }
+
+        ValidationResult result = userService.validateUser(user.getEmail(), user.getPassword(), session);
+
+        if(!result.valid()){
+            model.addAttribute("error", result.errorMessage());
+            return "Login";
+        }
+
+        return "redirect:/Hovedside";
+
+    }
+
+    @GetMapping("/Hovedside")
+    public String showMainPage(Model model, HttpSession session){
+        User loggedInUser = userService.getLoggedInUser(session);
+
+        if(loggedInUser == null){
+            return "redirect:/Login";
+        }
+        model.addAttribute("username", loggedInUser.getUsername());
+
+        return "/Hovedside";
     }
 
 }

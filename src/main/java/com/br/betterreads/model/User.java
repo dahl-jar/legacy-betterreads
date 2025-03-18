@@ -41,16 +41,13 @@ public class User {
         this.username = username;
         this.email = email;
         this.encodedPassword = encodedPassword;
-        createdAt = LocalDateTime.now();
     }
 
-    public User() {}
+    public User() { }
 
     @PrePersist
-    protected void onCreate(){
-        if(this.createdAt == null){
-            this.createdAt = LocalDateTime.now();
-        }
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getUserId() {

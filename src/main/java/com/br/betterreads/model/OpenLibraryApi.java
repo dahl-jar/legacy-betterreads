@@ -6,7 +6,7 @@ public class OpenLibraryApi {
     private String title;
     private List<OpenLibraryAuthorDTO> authors;
     private OpenLibraryCoverDTO cover;
-    private List<OpenLibrarySubjectDTO> subjects;
+    private List<OpenLibrarySubjectDTO> genre;
     private String description;
 
     public String getTitle() { return title; }
@@ -18,8 +18,8 @@ public class OpenLibraryApi {
     public OpenLibraryCoverDTO getCover() { return cover; }
     public void setCover(OpenLibraryCoverDTO cover) { this.cover = cover; }
 
-    public List<OpenLibrarySubjectDTO> getSubjects() { return subjects; }
-    public void setSubjects(List<OpenLibrarySubjectDTO> subjects) { this.subjects = subjects; }
+    public List<OpenLibrarySubjectDTO> getGenre() { return genre; }
+    public void setGenre(List<OpenLibrarySubjectDTO> genre) { this.genre = genre; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

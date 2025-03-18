@@ -6,7 +6,6 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap"/>
     <link rel="stylesheet" href="../static/styles.css">
-    <link rel="stylesheet" href="../static/footer.css">
     <link rel="stylesheet" href="../static/hovedside.css">
 </head>
 <body>
@@ -15,30 +14,35 @@
 
 <header th:fragment="header">
     <nav class="navbar">
-        <span>&#9776;</span>
-        <h1><a href="Hovedside.html">BetterReads</a></h1>
+        <span id="hamburger-icon">&#9776;</span>
+        <h1 id="header"><a href="Hovedside.html">BetterReads</a></h1>
         <div class="sidebar">
             <ul class="menu">
+                <li><search class="searchbar-nav">
+                    <form>
+                        <select aria-label="Search Filter Navbar" id="searchTypeNav">
+                            <option value="books">Books</option>
+                            <option value="authors">Authors</option>
+                        </select>
+                        <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
+                    </form>
+                </search></li>
                 <li><a href="Hovedside.html">Home</a></li>
                 <li><a href="">My Books</a></li>
                 <li><a href="">Browse</a></li>
             </ul>
-            <search class="searchbar-nav">
-                <form>
-                    <select aria-label="Search Filter Navbar" id="searchTypeNav">
-                        <option value="books">Books</option>
-                        <option value="authors">Authors</option>
-                    </select>
-                    <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
-                </form>
-            </search>
+
         </div>
-        <a href="Signup.html">Register</a>
-        <a href="Login.html">Login</a>
+        <div class="auth-links">
+            <div th:if="${#session.getAttribute('loggedInUser') == null}">
+                <a href="Signup.html">Register</a>
+                <a href="Login.html">Login</a>
+            </div>
+        </div>
     </nav>
 </header>
 
-<h1>goodreads but better</h1>
+<h1 id="underHeader">goodreads but better</h1>
 
 <div class="searchbar-container">
     <h2>Find your next book</h2>
@@ -59,7 +63,7 @@
 </div>
 
 <div class="top-picks">
-    <h2>Top Picks</h2>
+    <h2>Trending</h2>
     <div class="scoll-container">
         <div class="liste">
             <button class="scroll-btn left" onclick="scrollLeft()">
@@ -87,6 +91,26 @@
     </div>
 </div>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const hamburger = document.getElementById("hamburger-icon");
+        const sidebar = document.querySelector(".sidebar");
+
+        hamburger.addEventListener("click", function () {
+            sidebar.classList.toggle("show-menu"); // Åpne/lukke menyen
+        });
+
+        // Klikk utenfor menyen for å lukke den
+        document.addEventListener("click", function (event) {
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                sidebar.classList.remove("show-menu");
+            }
+        });
+    });
+
+
+
+
+
     function scrollLeft() {
         document.querySelector(".liste").scrollBy({ left: -350, behavior: "smooth" });  /* Increased from 300 to 350 */
     }

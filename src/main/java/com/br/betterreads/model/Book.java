@@ -38,21 +38,19 @@ public class Book {
     private String title;
 
     /**
+     * Title of the book.
+     */
+    @NotNull
+    @Column(name = "title", nullable = false)
+    private String Subtitle;
+
+
+    /**
      * Author of the book.
      */
     @NotNull
-    @Column(name = "author", nullable = false)
+    @Column(name = "author", nullable = false, columnDefinition = "varchar(255) default 'Unknown'")
     private String author;
-
-    /**
-     * ISBN (International Standard Book Number) for the book.
-     *
-     * Must be exactly 13 characters long to ensure valid ISBN format.
-     */
-    @NotNull(message = "Field is required")
-    @Size(min = 13, max = 13, message = "ISBN must be exactly size 13")
-    @Column(name = "ISBN", nullable = false, unique = true)
-    private String isbn;
 
     /**
      * Description of the book's content.
@@ -72,6 +70,16 @@ public class Book {
     @NotNull
     @Column(name = "cover_url", nullable = false)
     private String coverURL;
+
+    /**
+     * ISBN (International Standard Book Number) for the book.
+     *
+     * Must be exactly 13 characters long to ensure valid ISBN format.
+     */
+    @NotNull(message = "Field is required")
+    @Size(min = 13, max = 13, message = "ISBN must be exactly size 13")
+    @Column(name = "ISBN", nullable = false, unique = true)
+    private String isbn;
 
     /**
      * The timestamp of the last successful synchronization with external systems.

@@ -4,36 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Innstillinger</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/Innstillinger.css">
+    <link rel="stylesheet" href="../static/footer.css">
 </head>
 <body>
+<div th:insert="~{fragments :: header}"></div>
+
+<header th:fragment="header">
+    <nav class="navbar">
+        <span>&#9776;</span>
+        <h1><a href="Hovedside.html">BetterReads</a></h1>
+        <div class="sidebar">
+            <ul class="menu">
+                <li><a href="Hovedside.html">Home</a></li>
+                <li><a href="">My Books</a></li>
+                <li><a href="">Browse</a></li>
+            </ul>
+            <search class="searchbar-nav">
+                <form>
+                    <select aria-label="Search Filter Navbar" id="searchTypeNav">
+                        <option value="books">Books</option>
+                        <option value="authors">Authors</option>
+                    </select>
+                    <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
+                </form>
+            </search>
+        </div>
+        <a href="Signup.html">Register</a>
+        <a href="Login.html">Login</a>
+    </nav>
+</header>
 <div class="settings-container">
     <h2>Innstillinger</h2>
 
     <div class="setting-item">
-        <label for="username">Brukernavn:</label>
+        <label for="username">Username:</label>
         <input type="text" id="username" value="Brukernavn123">
     </div>
 
     <div class="setting-item">
-        <label for="email">E-post:</label>
+        <label for="email">Email:</label>
         <input type="email" id="email" value="bruker@example.com">
     </div>
 
     <div class="setting-item">
-        <label for="notifications">Varsler:</label>
+        <label for="notifications">Notifications:</label>
         <select id="notifications">
-            <option value="all">Alle varsler</option>
-            <option value="email">Kun e-post</option>
-            <option value="none">Ingen varsler</option>
+            <option value="all">All notifications</option>
+            <option value="email">Only E-mail</option>
+            <option value="none">No notifications</option>
         </select>
     </div>
 
     <div class="setting-item">
-        <label for="theme">Tema:</label>
+        <label for="theme">Theme:</label>
         <select id="theme">
-            <option value="light">Lyst tema</option>
-            <option value="dark">Mørkt tema</option>
+            <option value="light">Light theme</option>
+            <option value="dark">Dark theme</option>
         </select>
     </div>
 

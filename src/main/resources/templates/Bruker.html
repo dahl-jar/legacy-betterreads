@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>User Profile</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{../static/styles.css}">
+    <link rel="stylesheet" th:href="@{../static/footer.css}">
+    <link rel="stylesheet" th:href="@{../static/Bruker.css}">
+
 </head>
 <body>
+<div th:insert="~{fragments :: header}"></div>
+
+<header th:fragment="header">
+    <nav class="navbar">
+        <span>&#9776;</span>
+        <h1><a href="Hovedside.html">BetterReads</a></h1>
+        <div class="sidebar">
+            <ul class="menu">
+                <li><a href="Hovedside.html">Home</a></li>
+                <li><a href="">My Books</a></li>
+                <li><a href="">Browse</a></li>
+            </ul>
+            <search class="searchbar-nav">
+                <form>
+                    <select aria-label="Search Filter Navbar" id="searchTypeNav">
+                        <option value="books">Books</option>
+                        <option value="authors">Authors</option>
+                    </select>
+                    <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
+                </form>
+            </search>
+        </div>
+        <a href="Signup.html">Register</a>
+        <a href="Login.html">Login</a>
+    </nav>
+</header>
+
 <div class="container">
     <h2>Welcome, <span th:text="${user?.username ?: 'Guest'}"></span>!</h2>
 
@@ -21,6 +51,12 @@
 
     <p><strong>Joined:</strong> <span th:text="${#dates.format(user?.joinDate, 'MMMM dd, yyyy') ?: 'Unknown'}"></span></p>
 
+
+</div>
+
+<div class="container">
+    <h3><span th:text="${user != null ? user.username : 'Profile'}"></span>'s shelves</h3>
+    <p><a href="brukerbokliste.html"></a>all books</p>
 </div>
 
 

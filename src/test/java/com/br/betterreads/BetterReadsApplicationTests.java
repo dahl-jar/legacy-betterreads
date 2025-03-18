@@ -1,8 +1,9 @@
 package com.br.betterreads;
 
+import com.br.betterreads.config.SecurityConfig;
 import com.br.betterreads.model.User;
-import com.br.betterreads.repository.BokRepository;
 import com.br.betterreads.repository.UserRepository;
+import com.br.betterreads.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,12 +37,12 @@ class BrukerServiceTest {
     void createUser_SaveUserWithHashedPassword() {
         String rawPassord = "passord123";
         User mockUser = new User();
-        mockUser.setSalt_Password("randomSalt");;
+
         mockUser.setHashed_Password("hashedValue");
 
         when(userRepository.save(any(User.class))).thenReturn(mockUser);
 
-        User savedUser = UserService.createUser("testuser", "test@example.com", rawPassord);
+        User savedUser = UserService.("testuser", "test@example.com", rawPassord);
 
         assertNotNull(savedUser.getSalt_Password());
         assertNotNull(savedUser.getSalt_Password());
