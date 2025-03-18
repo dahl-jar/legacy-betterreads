@@ -6,13 +6,13 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 50, message = "Username needs to be at least 3 characters long")
@@ -31,8 +31,11 @@ public class User {
     @Column(name = "encoded_password", nullable = false)
     private String encodedPassword;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+
+    //Constructors
 
     public User(String username, String email, String encodedPassword) {
         this.username = username;
@@ -43,7 +46,14 @@ public class User {
 
     public User() {}
 
-    public int getUserId() {
+    @PrePersist
+    protected void onCreate(){
+        if(this.createdAt == null){
+            this.createdAt = LocalDateTime.now();
+        }
+    }
+
+    public Long getUserId() {
         return userId;
     }
 

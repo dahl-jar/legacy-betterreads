@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * It also tracks the book's synchronization status with external systems.
  */
 @Entity
-@Table(name = "Book")
+@Table(name = "book")
 public class Book {
 
     /**
@@ -20,28 +20,28 @@ public class Book {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Book_id")
+    @Column(name = "book_id")
     private Long bookId;
 
     /**
      * External API identifier for the book.
      */
     @NotNull
-    @Column(name = "Api_id", nullable = false)
+    @Column(name = "api_id", nullable = false)
     private int apiId;
 
     /**
      * Title of the book.
      */
     @NotNull
-    @Column(name = "Title", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     /**
      * Author of the book.
      */
     @NotNull
-    @Column(name = "Author", nullable = false)
+    @Column(name = "author", nullable = false)
     private String author;
 
     /**
@@ -57,7 +57,7 @@ public class Book {
     /**
      * Description of the book's content.
      */
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
     /**
@@ -70,14 +70,14 @@ public class Book {
      * URL to the book's cover image.
      */
     @NotNull
-    @Column(name = "Cover_URL", nullable = false)
+    @Column(name = "cover_url", nullable = false)
     private String coverURL;
 
     /**
      * The timestamp of the last successful synchronization with external systems.
      */
     @NotNull(message = "Field is required")
-    @Column(name = "Last_Sync", nullable = false)
+    @Column(name = "last_sync", nullable = false)
     private LocalDateTime lastSync;
 
 

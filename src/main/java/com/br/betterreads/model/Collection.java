@@ -7,20 +7,20 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Collection")
+@Table(name = "collection")
 @IdClass(Collection.class)
 public class Collection {
 
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "User_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "Book_id", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     @NotNull
     private Book book;
 

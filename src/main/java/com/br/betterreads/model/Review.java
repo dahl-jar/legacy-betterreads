@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * review text, and an automatically generated creation timestamp
  */
 @Entity
-@Table(name = "Review")
+@Table(name = "review")
 public class Review {
 
     /**
@@ -24,7 +24,7 @@ public class Review {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Review_id")
+    @Column(name = "review_id")
     private Long reviewId;
 
     /**
@@ -34,7 +34,7 @@ public class Review {
      * be associated with one user
      */
     @ManyToOne
-    @JoinColumn(name = "User_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
 
@@ -44,7 +44,7 @@ public class Review {
      * This is a many-to-one relationship since many reviews can be written for one book
      */
     @ManyToOne
-    @JoinColumn(name = "Book_id", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     @NotNull
     private Book book;
 
@@ -56,7 +56,7 @@ public class Review {
     @NotNull
     @Min(value = 1, message = "Rating must be at least 1.")
     @Max(value = 5, message = "Rating must be at most 5.")
-    @Column(name = "Rating", nullable = false)
+    @Column(name = "rating", nullable = false)
     private int rating;
 
     /**
@@ -66,7 +66,7 @@ public class Review {
      */
     @NotNull
     @Size(min = 1, max = 1000, message = "Review text must be between 1 and 1000 characters")
-    @Column(name = "Review_text", nullable = false)
+    @Column(name = "review_text", nullable = false)
     private String text;
 
     /**
@@ -76,7 +76,7 @@ public class Review {
      * and cannot be updated afterward
      */
     @NotNull
-    @Column(name = "Created_at",nullable = false, updatable = false)
+    @Column(name = "created_at",nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
 
