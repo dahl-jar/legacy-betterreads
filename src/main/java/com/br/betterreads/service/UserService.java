@@ -26,7 +26,10 @@ public class UserService {
     @Transactional
     public ValidationResult createAndSaveUser(String username, String email, String password, String repeatPassword) {
 
-        if(username.isBlank() || email.isBlank() || password.isBlank() || repeatPassword.isBlank()) {
+        if(username == null || username.isBlank() ||
+                email == null || email.isBlank() ||
+                password == null || password.isBlank() ||
+                repeatPassword == null || repeatPassword.isBlank()) {
             return ValidationResult.error("All fields are required");
         }
 
@@ -38,20 +41,22 @@ public class UserService {
         if(userRepo.findByEmail(email).isPresent()) return ValidationResult.error("Email already exists");
         if(!password.equals(repeatPassword)) return ValidationResult.error("Passwords do not match");
 
-        String hashedPassword = passwordEncoder.encode(password);
+        String encodedPassword = passwordEncoder.encode(password);
 
-        User newUser = new User(username, email, hashedPassword);
+        User newUser = new User(username, email, encodedPassword);
+        newUser.setPassword(password);
+        newUser.setRepeatPassword(repeatPassword);
         userRepo.save(newUser);
         return ValidationResult.success();
     }
 
     public ValidationResult validateUser(String email, String password, HttpSession session){
 
-        if(email == null || email.trim().isEmpty()){
+        if(email == null || email.isBlank()){
             return ValidationResult.error("Email cannot be empty");
         }
 
-        if(password == null || password.trim().isEmpty()){
+        if(password == null || password.isBlank()){
             return ValidationResult.error("Password cannot be empty");
         }
 
@@ -61,17 +66,13 @@ public class UserService {
             return ValidationResult.error("No account with this email");
         }
 
-        if(!userOptional.get().getHashed_Password().equals(password)){
+        if(!passwordEncoder.matches(password, userOptional.get().getHashed_Password())){
             return ValidationResult.error("Incorrect password");
         }
 
         session.setAttribute("loggedInUser", userOptional.get());
 
         return ValidationResult.success();
-
-
-
-
     }
 
     public void logoutUser(HttpSession session){

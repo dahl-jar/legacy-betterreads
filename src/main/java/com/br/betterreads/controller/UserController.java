@@ -21,70 +21,72 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public String home() {
+        return "redirect:login";
+    }
+
     @GetMapping("/signup")
-    public String showSignUpForm(Model model){
+    public String showSignUpForm(Model model) {
         model.addAttribute("user", new User());
         return "Signup";
     }
 
     @PostMapping("/signup")
     public String register(@Valid @ModelAttribute("user") User user,
-                           Model model,
-                           BindingResult bindingResult) {
-
-        if(bindingResult.hasErrors()) return "Signup";
+                           Model model) {
 
         ValidationResult result = userService.createAndSaveUser(user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getRepeatPassword());
 
-        if(!result.valid()) {
+        if (!result.valid()) {
             model.addAttribute("error", result.errorMessage());
             return "Signup";
         }
 
-        return "redirect:/Login";
+        return "redirect:login";
     }
 
     @GetMapping("/login")
-    public String showLoginForm(Model model){
+    public String showLoginForm(Model model) {
         model.addAttribute("user", new User());
         return "Login";
     }
 
     @PostMapping("/login")
     public String processLogin(@Valid @ModelAttribute("user") User user,
-                               Model model,
                                BindingResult bindingResult,
-                               HttpSession session){
+                               HttpSession session,
+                               Model model) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Invalid input");
-            return "/login";
+            return "Login";
         }
 
         ValidationResult result = userService.validateUser(user.getEmail(), user.getPassword(), session);
 
-        if(!result.valid()){
+        if (!result.valid()) {
             model.addAttribute("error", result.errorMessage());
             return "Login";
         }
 
-        return "redirect:/Hovedside";
+        return "redirect:hovedside";
 
     }
 
-    @GetMapping("/Hovedside")
-    public String showMainPage(Model model, HttpSession session){
+    @GetMapping("/hovedside")
+    public String showMainPage(Model model, HttpSession session) {
         User loggedInUser = userService.getLoggedInUser(session);
 
-        if(loggedInUser == null){
-            return "redirect:/Login";
+        if (loggedInUser == null) {
+            return "redirect:login";
         }
         model.addAttribute("username", loggedInUser.getUsername());
 
-        return "/Hovedside";
+        return "Hovedside";
     }
 
 }

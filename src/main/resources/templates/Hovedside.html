@@ -5,12 +5,12 @@
     <title>BetterReads</title>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap"/>
-    <link rel="stylesheet" href="../static/styles.css">
-    <link rel="stylesheet" href="../static/hovedside.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" th:href="@{/hovedside.css}">
 </head>
 <body>
 
-<div th:insert="~{fragments :: header}"></div>
+<!--<div th:insert="~{fragments :: header}"></div>-->
 
 <header th:fragment="header">
     <nav class="navbar">
@@ -27,16 +27,16 @@
                         <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
                     </form>
                 </search></li>
-                <li><a href="Hovedside.html">Home</a></li>
+                <li><a th:href="@{/hovedside}">Home</a></li>
                 <li><a href="">My Books</a></li>
                 <li><a href="">Browse</a></li>
             </ul>
 
         </div>
         <div class="auth-links">
-            <div th:if="${#session.getAttribute('loggedInUser') == null}">
-                <a href="Signup.html">Register</a>
-                <a href="Login.html">Login</a>
+            <div th:if="${username == null}">
+                <a th:href="@{/signup}">Register</a>
+                <a th:href="@{/login}">Login</a>
             </div>
         </div>
     </nav>
@@ -71,7 +71,7 @@
             </button>
             <!-- TODO lag denne listen -->
 
-            <img th:each="book : ${books}" th:src="${book.coverURL}" th:alt="${book.title}">
+<!--            <img th:each="book : ${books}" th:src="${book.coverURL}" th:alt="${book.title}">-->
             <img src="../static/images/covertemplate.jpg" alt="template">
             <img src="../static/images/covertemplate.jpg" alt="template">
             <img src="../static/images/covertemplate.jpg" alt="template">
@@ -128,7 +128,7 @@
     });
 </script>
 
-<div th:insert="~{fragments :: footer}"></div>
+<!--<div th:insert="~{fragments :: footer}"></div>-->
 <footer th:fragment="footer" class="footer">
     <div class="footer-container">
         <div class="footer-header">

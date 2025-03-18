@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * It also tracks the book's synchronization status with external systems.
  */
 @Entity
-@Table(name = "book")
+@Table(name = "book", schema = "betterreads")
 public class Book {
 
     /**
@@ -41,8 +41,8 @@ public class Book {
      * Title of the book.
      */
     @NotNull
-    @Column(name = "title", nullable = false)
-    private String Subtitle;
+    @Column(name = "subtitle", nullable = false)
+    private String subtitle;
 
 
     /**
@@ -63,6 +63,9 @@ public class Book {
      */
     @Column(name = "genre")
     private String genre;
+
+    @Column(name = "publication_year")
+    private Integer publicationYear;
 
     /**
      * URL to the book's cover image.
@@ -241,6 +244,22 @@ public class Book {
      */
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public @NotNull String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(@NotNull String subtitle) {
+        subtitle = subtitle;
+    }
+
+    public Integer getPublicationYear() {
+        return publicationYear;
+    }
+
+    public void setPublicationYear(Integer publicationYear) {
+        this.publicationYear = publicationYear;
     }
 
     /**

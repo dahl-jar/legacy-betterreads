@@ -2,6 +2,7 @@ package com.br.betterreads.util;
 
 import com.br.betterreads.model.OpenLibraryApi;
 import com.br.betterreads.model.Book;
+import com.br.betterreads.model.OpenLibraryTrendingResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,4 +36,11 @@ public class BookMapper {
                 .map(OpenLibraryApi.OpenLibrarySubjectDTO::getName)
                 .collect(Collectors.joining(", "));
     }
+
+//    public Object convertTrendingBook(OpenLibraryTrendingResponse.TrendingBook trendingBook) {
+//        Book book = new Book();
+//        book.setTitle(trendingBook.getTitle());
+//        book.setAuthor(trendingBook.getAuthorNames());
+//        book.setPublicationYear(trendingBook.getFirstPublishedYear());
+//    }
 }

@@ -18,6 +18,10 @@ body {
     background-color: #F5F2EB; /* Samme hovedfarge som nettsiden */
 }
 
+.error {
+    color: #f38ba8;
+}
+
 /* Container for login-formen */
 .container {
     background: white;

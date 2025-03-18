@@ -26,7 +26,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
      * @param subtitle
      * @return
      */
-    List<Book> findBySubTitle(String subtitle);
+    List<Book> findBySubtitle(String subtitle);
 
     /**
      * @param author

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "collection")
+@Table(name = "collection", schema = "betterreads")
 @IdClass(Collection.class)
 public class Collection {
 

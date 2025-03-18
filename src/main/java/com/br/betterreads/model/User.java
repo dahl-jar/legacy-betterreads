@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", schema = "betterreads")
 public class User {
 
     @Id
@@ -76,6 +76,14 @@ public class User {
 
     public String getRepeatPassword() {
         return repeatPassword;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
     }
 
     public String getHashed_Password() {
