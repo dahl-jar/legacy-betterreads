@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 
 /*globale variabler*/
-:root{
+:root {
     --maincolor: #F5F2EB;
     --textcolor: black;
     --navColor: #9CAFB7;
 }
 
 /*Nav!*/
-body{
+body {
     font-family: 'Segoe UI', Tahoma, sans-serif;
     background-color: var(--maincolor);
     color: var(--textcolor);
@@ -57,6 +57,11 @@ body{
 
 .navbar a:hover {
     color: #706F6F;
+}
+
+.navbar .user .material-symbols-outlined {
+    font-size: 50px;
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 48;
 }
 
 /* Stil for sidemeny */
@@ -109,7 +114,6 @@ body{
     font-size: 32px;
     cursor: pointer;
 }
-
 
 
 /*Footer!*/

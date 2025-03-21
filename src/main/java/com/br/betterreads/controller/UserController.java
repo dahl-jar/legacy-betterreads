@@ -30,11 +30,6 @@ public class UserController {
         this.apiService = apiService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "Hovedside";
-    }
-
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         model.addAttribute("user", new User());
@@ -82,18 +77,21 @@ public class UserController {
             return "Login";
         }
 
-        return "redirect:hovedside";
+        return "redirect:/";
 
     }
 
-    @GetMapping("/hovedside")
+    @GetMapping("/")
     public String showMainPage(Model model, HttpSession session) {
         User loggedInUser = userService.getLoggedInUser(session);
 
-        if (loggedInUser == null) {
-            return "redirect:login";
+//        if (loggedInUser == null) {
+//            return "redirect:login";
+//        }
+
+        if (loggedInUser != null) {
+            model.addAttribute("username", loggedInUser.getUsername());
         }
-        model.addAttribute("username", loggedInUser.getUsername());
 
         List<Book> trendingBooks = apiService.fetchTrendingBooks(12);
         model.addAttribute("books", trendingBooks);

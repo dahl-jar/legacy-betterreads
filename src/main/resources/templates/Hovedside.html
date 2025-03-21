@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>BetterReads</title>
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap"/>
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap">
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" th:href="@{/hovedside.css}">
 </head>
@@ -18,15 +18,18 @@
         <h1 id="header"><a href="Hovedside.html">BetterReads</a></h1>
         <div class="sidebar">
             <ul class="menu">
-                <li><search class="searchbar-nav">
-                    <form>
-                        <select aria-label="Search Filter Navbar" id="searchTypeNav">
-                            <option value="books">Books</option>
-                            <option value="authors">Authors</option>
-                        </select>
-                        <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
-                    </form>
-                </search></li>
+                <li>
+                    <search class="searchbar-nav">
+                        <form>
+                            <select aria-label="Search Filter Navbar" id="searchTypeNav">
+                                <option value="books">Books</option>
+                                <option value="authors">Authors</option>
+                            </select>
+                            <input aria-label="navsearch" id="navsearch" type="search" name="search"
+                                   placeholder="Search...">
+                        </form>
+                    </search>
+                </li>
                 <li><a th:href="@{/hovedside}">Home</a></li>
                 <li><a href="">My Books</a></li>
                 <li><a href="">Browse</a></li>
@@ -38,6 +41,9 @@
                 <a th:href="@{/signup}">Register</a>
                 <a th:href="@{/login}">Login</a>
             </div>
+        </div>
+        <div class="user">
+            <i class="material-symbols-outlined">account_circle</i>
         </div>
     </nav>
 </header>
@@ -95,18 +101,15 @@
     });
 
 
-
-
-
     function scrollLeft() {
-        document.querySelector(".liste").scrollBy({ left: -350, behavior: "smooth" });  /* Increased from 300 to 350 */
+        document.querySelector(".liste").scrollBy({left: -350, behavior: "smooth"});  /* Increased from 300 to 350 */
     }
 
     function scrollRight() {
-        document.querySelector(".liste").scrollBy({ left: 350, behavior: "smooth" });   /* Increased from 300 to 350 */
+        document.querySelector(".liste").scrollBy({left: 350, behavior: "smooth"});   /* Increased from 300 to 350 */
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const leftBtn = document.querySelector(".scroll-btn.left");
         const rightBtn = document.querySelector(".scroll-btn.right");
 
