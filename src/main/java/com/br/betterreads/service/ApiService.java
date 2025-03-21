@@ -46,11 +46,11 @@ public class ApiService {
             Book book = bookMapper.convertToBook(bookData, isbn);
             String url = bookData.getUrl();
             if (url != null) {
-                String[] parts = url.split("/");
+                String[] split = url.split("/");
                 String bookId = "";
-                for (int i = 0; i < parts.length; i++) {
-                    if ("books".equals(parts[i]) && i + 1 < parts.length) {
-                        bookId = parts[i + 1];
+                for (int i = 0; i < split.length; i++) {
+                    if ("books".equals(split[i]) && i + 1 < split.length) {
+                        bookId = split[i + 1];
                         break;
                     }
                 }
@@ -69,9 +69,9 @@ public class ApiService {
                     if (worksObj instanceof List<?> worksList) {
                         if (!worksList.isEmpty() && worksList.getFirst() instanceof Map) {
                             @SuppressWarnings("unchecked")
-                            Map<String, Object> firstWork = (Map<String, Object>) worksList.getFirst();
-                            Object keyObj = firstWork.get("key");
-                            if (keyObj instanceof String workKey) {
+                            Map<String, Object> first = (Map<String, Object>) worksList.getFirst();
+                            Object key = first.get("key");
+                            if (key instanceof String workKey) {
                                 String workId = workKey.replace("/works/", "");
                                 String workUrl = "https://openlibrary.org/works/" + workId + ".json";
                                 ResponseEntity<Map<String, Object>> workDetailsResponse = restTemplate.exchange(
@@ -83,14 +83,14 @@ public class ApiService {
 
                                 Map<String, Object> workDetails = workDetailsResponse.getBody();
                                 if (workDetails != null && workDetails.containsKey("description")) {
-                                    Object descObj = workDetails.get("description");
-                                    String description = getDescription(descObj);
+                                    Object desObj = workDetails.get("description");
+                                    String description = getDescription(desObj);
                                     book = bookMapper.updateBookWithDescription(book, description);
                                 }
 
                                 if (workDetails != null && workDetails.containsKey("subtitle")) {
-                                    Object subtitleObj = workDetails.get("subtitle");
-                                    String subtitle = getSubtitle(subtitleObj);
+                                    Object subObj = workDetails.get("subtitle");
+                                    String subtitle = getSubtitle(subObj);
                                     book.setSubtitle(subtitle);
                                 }
                             }
@@ -112,9 +112,9 @@ public class ApiService {
             return (String) descObj;
         } else if (descObj instanceof Map) {
             @SuppressWarnings("unchecked")
-            Map<String, Object> descMap = (Map<String, Object>) descObj;
-            Object valueObj = descMap.get("value");
-            return valueObj instanceof String ? (String) valueObj : "No description available";
+            Map<String, Object> DesMap = (Map<String, Object>) descObj;
+            Object ValObj = DesMap.get("value");
+            return ValObj instanceof String ? (String) ValObj : "No description available";
         }
         return "No description available";
     }
@@ -124,9 +124,9 @@ public class ApiService {
             return (String) subtitleObj;
         } else if (subtitleObj instanceof Map) {
             @SuppressWarnings("unchecked")
-            Map<String, Object> subtitleMap = (Map<String, Object>) subtitleObj;
-            Object valueObj = subtitleMap.get("value");
-            return valueObj instanceof String ? (String) valueObj : null;
+            Map<String, Object> SubMap = (Map<String, Object>) subtitleObj;
+            Object ValObj = SubMap.get("value");
+            return ValObj instanceof String ? (String) ValObj : null;
         }
         return null;
     }

@@ -33,9 +33,9 @@ public class BookMapper {
 
         if (dto.getPublishDate() != null) {
             try {
-                String[] dateParts = dto.getPublishDate().split(" ");
-                String yearString = dateParts[dateParts.length - 1];
-                book.setPublicationYear(Integer.parseInt(yearString));
+                String[] split = dto.getPublishDate().split(" ");
+                String year = split[split.length - 1];
+                book.setPublicationYear(Integer.parseInt(year));
             } catch (Exception e) {
                 book.setPublicationYear(null);
             }
@@ -52,14 +52,14 @@ public class BookMapper {
 
     private String formatSubjects(List<OpenLibraryApi.OpenLibrarySubjectDTO> subjects) {
         if (subjects == null || subjects.isEmpty()) return null;
-        Set<String> uniqueGenres = subjects.stream()
+        Set<String> Unique = subjects.stream()
                 .map(OpenLibraryApi.OpenLibrarySubjectDTO::getName)
                 .map(String::toLowerCase)
                 .filter(genre -> !genre.contains("fictitious character"))
                 .filter(genre -> genre.matches("^[a-zA-Z ]+$"))
                 .collect(Collectors.toSet());
 
-        return uniqueGenres.isEmpty() ? null : String.join(", ", uniqueGenres);
+        return Unique.isEmpty() ? null : String.join(", ", Unique);
     }
 
     public Book convertTrendingBook(OpenLibraryTrendingResponse.TrendingBook trendingBook) {
