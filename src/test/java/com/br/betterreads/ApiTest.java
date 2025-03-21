@@ -17,8 +17,8 @@ class ApiTest {
 
     @Test
     void testFetchBook() {
-        Book book = apiService.fetchBookFromApi("9788202529226");
+        Book book = apiService.fetchBookFromApi("9780812511819");
         assertNotNull(book.getTitle());
-        assertEquals("Jostein Gaarder", book.getAuthor());
+        assertEquals("Robert Jordan", book.getAuthor());
     }
 }
