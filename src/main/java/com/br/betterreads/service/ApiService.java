@@ -26,26 +26,93 @@ public class ApiService {
     }
 
     public Book fetchBookFromApi(String isbn) {
-        String apiUrl = String.format(
-                "https://openlibrary.org/api/books?bibkeys=ISBN:%s&format=json&jscmd=data",
-                isbn
-        );
+        try {
+            String isbnUrl = String.format(
+                    "https://openlibrary.org/api/books?bibkeys=ISBN:%s&format=json&jscmd=data",
+                    isbn
+            );
 
-        ResponseEntity<Map<String, OpenLibraryApi>> response = restTemplate.exchange(
-                apiUrl,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
+            ResponseEntity<Map<String, OpenLibraryApi>> response = restTemplate.exchange(
+                    isbnUrl,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {}
+            );
+
+            OpenLibraryApi bookData = Objects.requireNonNull(response.getBody()).get("ISBN:" + isbn);
+            if (bookData == null) {
+                return null;
+            }
+            Book book = bookMapper.convertToBook(bookData, isbn);
+            String url = bookData.getUrl();
+            if (url != null) {
+                String[] parts = url.split("/");
+                String bookId = "";
+                for (int i = 0; i < parts.length; i++) {
+                    if ("books".equals(parts[i]) && i + 1 < parts.length) {
+                        bookId = parts[i + 1];
+                        break;
+                    }
                 }
-        );
 
-        OpenLibraryApi bookDTO = Objects.requireNonNull(response.getBody()).get("ISBN:" + isbn);
-        if (bookDTO == null) {
-            throw new RuntimeException("Book not found");
+                String bookDetailsUrl = "https://openlibrary.org/books/" + bookId + ".json";
+                ResponseEntity<Map<String, Object>> bookDetailsResponse = restTemplate.exchange(
+                        bookDetailsUrl,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<>() {}
+                );
+
+                Map<String, Object> bookDetails = bookDetailsResponse.getBody();
+                if (bookDetails != null && bookDetails.containsKey("works")) {
+                    Object worksObj = bookDetails.get("works");
+                    if (worksObj instanceof List<?> worksList) {
+                        if (!worksList.isEmpty() && worksList.getFirst() instanceof Map) {
+                            @SuppressWarnings("unchecked")
+                            Map<String, Object> firstWork = (Map<String, Object>) worksList.getFirst();
+                            Object keyObj = firstWork.get("key");
+                            if (keyObj instanceof String workKey) {
+                                String workId = workKey.replace("/works/", "");
+                                String workUrl = "https://openlibrary.org/works/" + workId + ".json";
+                                ResponseEntity<Map<String, Object>> workDetailsResponse = restTemplate.exchange(
+                                        workUrl,
+                                        HttpMethod.GET,
+                                        null,
+                                        new ParameterizedTypeReference<>() {}
+                                );
+
+                                Map<String, Object> workDetails = workDetailsResponse.getBody();
+                                if (workDetails != null && workDetails.containsKey("description")) {
+                                    Object descObj = workDetails.get("description");
+                                    String description = getDescription(descObj);
+                                    book = bookMapper.updateBookWithDescription(book, description);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return book;
+        } catch (Exception e) {
+            System.err.println("Error fetching book data: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-
-        return bookMapper.convertToBook(bookDTO, isbn);
     }
+
+    private static String getDescription(Object descObj) {
+        if (descObj instanceof String) {
+            return (String) descObj;
+        } else if (descObj instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> descMap = (Map<String, Object>) descObj;
+            Object valueObj = descMap.get("value");
+            return valueObj instanceof String ? (String) valueObj : "No description available";
+        }
+        return "No description available";
+    }
+
 
     public List<Book> fetchTrendingBooks(int limit) {
         String apiUrl = "https://openlibrary.org/trending/weekly.json?limit=" + limit;

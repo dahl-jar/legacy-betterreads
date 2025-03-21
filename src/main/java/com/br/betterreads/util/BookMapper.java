@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -18,9 +19,24 @@ public class BookMapper {
         book.setAuthor(formatAuthors(dto.getAuthors()));
         book.setIsbn(isbn);
         book.setCoverURL(dto.getCover() != null ? dto.getCover().getMedium() : null);
-        book.setDescription(dto.getDescription());
         book.setGenre(formatSubjects(dto.getGenre()));
-        book.setLastSync(java.time.LocalDateTime.now());
+        book.setLastSync(LocalDateTime.now());
+
+        if (dto.getDescription() != null) {
+            book.setDescription(dto.getDescription());
+        } else {
+            book.setDescription("No description available");
+        }
+
+        if (dto.getPublishDate() != null) {
+            try {
+                String[] dateParts = dto.getPublishDate().split(" ");
+                String yearString = dateParts[dateParts.length - 1];
+                book.setPublicationYear(Integer.parseInt(yearString));
+            } catch (Exception e) {
+                book.setPublicationYear(null);
+            }
+        }
         return book;
     }
 
@@ -32,10 +48,15 @@ public class BookMapper {
     }
 
     private String formatSubjects(List<OpenLibraryApi.OpenLibrarySubjectDTO> subjects) {
-        if (subjects == null) return null;
-        return subjects.stream()
+        if (subjects == null || subjects.isEmpty()) return null;
+        Set<String> uniqueGenres = subjects.stream()
                 .map(OpenLibraryApi.OpenLibrarySubjectDTO::getName)
-                .collect(Collectors.joining(", "));
+                .map(String::toLowerCase)
+                .filter(genre -> !genre.contains("fictitious character"))
+                .filter(genre -> genre.matches("^[a-zA-Z ]+$"))
+                .collect(Collectors.toSet());
+
+        return uniqueGenres.isEmpty() ? null : String.join(", ", uniqueGenres);
     }
 
     public Book convertTrendingBook(OpenLibraryTrendingResponse.TrendingBook trendingBook) {
@@ -53,6 +74,13 @@ public class BookMapper {
         book.setCoverURL(trendingBook.getCoverUrl());
         book.setLastSync(LocalDateTime.now());
 
+        return book;
+    }
+
+    public Book updateBookWithDescription(Book book, String description) {
+        if (description != null && !description.isEmpty()) {
+            book.setDescription(description);
+        }
         return book;
     }
 }

@@ -17,7 +17,17 @@ class ApiTest {
 
     @Test
     void testFetchBook() {
-        Book book = apiService.fetchBookFromApi("9780812511819");
+        Book book = apiService.fetchBookFromApi("9780812550306");
+
+        System.out.println("Book details:");
+        System.out.println("Title: " + book.getTitle());
+        System.out.println("Author: " + book.getAuthor());
+        System.out.println("ISBN: " + book.getIsbn());
+        System.out.println("Genre: " + book.getGenre());
+        System.out.println("covers: " + book.getCoverURL());
+        System.out.println("Publication Year: " + book.getPublicationYear());
+        System.out.println("Description: " + book.getDescription());
+
         assertNotNull(book.getTitle());
         assertEquals("Robert Jordan", book.getAuthor());
     }
