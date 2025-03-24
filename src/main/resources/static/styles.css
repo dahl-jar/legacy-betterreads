@@ -34,6 +34,11 @@ body {
     margin: 0;
 }
 
+.navbar #header a {
+    font-family: "Roboto Slab", serif;
+    font-size: 2em;
+}
+
 /* Flytt Login og Register til høyre */
 .navbar .auth-links {
     margin-left: auto; /* Skyver Login/Register til høyre */

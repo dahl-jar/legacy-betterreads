@@ -81,6 +81,12 @@ public class UserController {
 
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
+
     @GetMapping("/")
     public String showMainPage(Model model, HttpSession session) {
         User loggedInUser = userService.getLoggedInUser(session);
@@ -95,7 +101,7 @@ public class UserController {
 
         List<Book> trendingBooks = apiService.fetchTrendingBooks(12);
         model.addAttribute("books", trendingBooks);
-        return "Hovedside";
+        return "BetterReads";
     }
 
 }

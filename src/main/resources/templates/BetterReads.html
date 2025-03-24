@@ -10,43 +10,7 @@
 </head>
 <body>
 
-<!--<div th:insert="~{fragments :: header}"></div>-->
-
-<header th:fragment="header">
-    <nav class="navbar">
-        <span id="hamburger-icon">&#9776;</span>
-        <h1 id="header"><a href="Hovedside.html">BetterReads</a></h1>
-        <div class="sidebar">
-            <ul class="menu">
-                <li>
-                    <search class="searchbar-nav">
-                        <form>
-                            <select aria-label="Search Filter Navbar" id="searchTypeNav">
-                                <option value="books">Books</option>
-                                <option value="authors">Authors</option>
-                            </select>
-                            <input aria-label="navsearch" id="navsearch" type="search" name="search"
-                                   placeholder="Search...">
-                        </form>
-                    </search>
-                </li>
-                <li><a th:href="@{/hovedside}">Home</a></li>
-                <li><a href="">My Books</a></li>
-                <li><a href="">Browse</a></li>
-            </ul>
-
-        </div>
-        <div class="auth-links">
-            <div th:if="${username == null}">
-                <a th:href="@{/signup}">Register</a>
-                <a th:href="@{/login}">Login</a>
-            </div>
-        </div>
-        <div class="user">
-            <i class="material-symbols-outlined">account_circle</i>
-        </div>
-    </nav>
-</header>
+<div th:insert="~{fragments :: header}"></div>
 
 <h1 id="underHeader">goodreads but better</h1>
 
@@ -121,29 +85,6 @@
     });
 </script>
 
-<!--<div th:insert="~{fragments :: footer}"></div>-->
-<footer th:fragment="footer" class="footer">
-    <div class="footer-container">
-        <div class="footer-header">
-            <h1><span class="skinny">better</span><span class="fat">reads</span></h1>
-        </div>
-        <div class="footer-section">
-            <h3>About us</h3>
-            <p>...</p>
-        </div>
-        <div class="footer-section">
-            <h3>Help</h3>
-            <p>...</p>
-        </div>
-        <div class="footer-section">
-            <h3>Contact us</h3>
-            <p>...</p>
-        </div>
-        <div class="media"></div>
-    </div>
-    <div class="copyright">
-        <p>&copy; 2025 BetterReads. All rights reserved.</p>
-    </div>
-</footer>
+<div th:insert="~{fragments :: footer}"></div>
 </body>
 </html>

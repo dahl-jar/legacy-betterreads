@@ -12,7 +12,7 @@
 <header th:fragment="header">
     <nav class="navbar">
         <span id="hamburger-icon">&#9776;</span>
-        <h1 id="header"><a th:href="@{/}">BetterReads</a></h1>
+        <h1 id="header"><a th:href="@{/}"><span class="skinny">better</span><span class="fat">reads</span></a></h1>
         <div class="sidebar">
             <ul class="menu">
                 <li>
@@ -37,6 +37,9 @@
             <div th:if="${username == null}">
                 <a th:href="@{/signup}">Register</a>
                 <a th:href="@{/login}">Login</a>
+            </div>
+            <div th:if="${username}">
+                <a th:href="@{/logout}">Logout</a>
             </div>
         </div>
         <div class="user">

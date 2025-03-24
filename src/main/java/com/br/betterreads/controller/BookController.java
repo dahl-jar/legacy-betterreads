@@ -55,6 +55,8 @@ public class BookController {
     public String viewBook(@RequestParam String isbn, Model model) {
         Book book = bookService.searchBookByIsbn(isbn);
         if (book != null) {
+            String cUrl = book.getCoverURL();
+            book.setCoverURL(cUrl.replace("-M", "-L"));
             model.addAttribute("book", book);
             return "Bok";
         } else {

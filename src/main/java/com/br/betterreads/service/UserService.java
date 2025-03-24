@@ -75,10 +75,6 @@ public class UserService {
         return ValidationResult.success();
     }
 
-    public void logoutUser(HttpSession session){
-            session.invalidate();
-    }
-
     public User getLoggedInUser(HttpSession session){
         return (User) session.getAttribute("loggedInUser");
     }
