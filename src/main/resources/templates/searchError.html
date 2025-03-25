@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Search Error - BetterReads</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap">
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
 <div th:insert="~{fragments :: header}"></div>
 
-<div class="search-error">
-    <h1>No Results Found</h1>
-    <p th:text="${error}">Error message</p>
-
-    <div class="search-again">
-        <h2>Try another search</h2>
-        <form action="/search" method="get">
-            <label>
-                <select name="searchType">
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                    <option value="isbn">ISBN</option>
-                </select>
-            </label>
-            <label>
-                <input type="search" name="query" placeholder="Search...">
-            </label>
-            <button type="submit">Search</button>
-        </form>
-    </div>
+<div class="searchbar-container">
+<h2>Try again</h2>
+<div class="searchbar-main">
+    <form th:action="@{/search}" method="get">
+        <select name="searchType" id="typeSearch" aria-label="Search filter main">
+            <option value="title">Title</option>
+            <option value="author">Author</option>
+            <option value="isbn">ISBN</option>
+        </select>
+        <input aria-label="Search bar main" type="search" id="main-search" name="query" placeholder="Search ...">
+        <button class="search-btn-main" type="submit">
+            <i class="material-symbols-outlined">search</i>
+        </button>
+        <div class="button-separator"></div>
+        <button class="barcode-btn-main" type="button">
+            <i class="material-symbols-outlined">barcode_scanner</i>
+        </button>
+    </form>
+</div>
 </div>
 
 <div th:insert="~{fragments :: footer}"></div>

@@ -170,14 +170,7 @@ public class ApiService {
                     book.setAuthor("Unknown Author");
                 }
 
-                String isbn = null;
-                if (doc.has("isbn") && doc.get("isbn").isArray() && !doc.get("isbn").isEmpty()) {
-                    isbn = doc.get("isbn").get(0).asText();
-                    isbn = normalizeIsbn(isbn);
-                } else {
-                    isbn = generateIsbnFromKey(key);
-                }
-                book.setIsbn(isbn);
+                book.setDescription("No description available");
 
                 if (doc.has("cover_i")) {
                     book.setCoverURL("https://covers.openlibrary.org/b/id/" + doc.get("cover_i").asText() + "-M.jpg");
@@ -188,12 +181,179 @@ public class ApiService {
                 if (doc.has("first_publish_year")) {
                     book.setPublicationYear(doc.get("first_publish_year").asInt());
                 }
+
+                String isbn = null;
+                if (doc.has("isbn") && doc.get("isbn").isArray() && !doc.get("isbn").isEmpty()) {
+                    isbn = doc.get("isbn").get(0).asText();
+                    isbn = normalizeIsbn(isbn);
+
+                    if (isbn.length() == 13 && !isbn.equals("0000000000000")) {
+                        Book detailedBook = fetchBookFromApi(isbn);
+                        if (detailedBook != null) {
+                            books.add(detailedBook);
+                            continue;
+                        }
+                    }
+                } else {
+                    isbn = generateIsbnFromKey(key);
+                }
+                book.setIsbn(isbn);
+
+                if (doc.has("subject") && doc.get("subject").isArray()) {
+                    List<OpenLibraryApi.OpenLibrarySubjectDTO> subjects = new ArrayList<>();
+                    JsonNode subjectNodes = doc.get("subject");
+
+                    for (JsonNode subjectNode : subjectNodes) {
+                        OpenLibraryApi.OpenLibrarySubjectDTO subject = new OpenLibraryApi.OpenLibrarySubjectDTO();
+                        subject.setName(subjectNode.asText());
+                        subjects.add(subject);
+                    }
+
+                    book.setGenre(bookMapper.formatSubjects(subjects));
+                }
+
+                String workKey = null;
+                if (doc.has("key")) {
+                    try {
+                        if (doc.get("key").asText().startsWith("/works/")) {
+                            workKey = doc.get("key").asText();
+                        } else if (doc.has("work_key")) {
+                            workKey = doc.get("work_key").asText();
+                        } else if (doc.has("key") && doc.get("key").asText().startsWith("/books/")) {
+                            String bookKey = doc.get("key").asText();
+                            String bookUrl = "https://openlibrary.org" + bookKey + ".json";
+
+                            try {
+                                ResponseEntity<Map<String, Object>> bookResponse = restTemplate.exchange(
+                                        bookUrl,
+                                        HttpMethod.GET,
+                                        null,
+                                        new ParameterizedTypeReference<>() {}
+                                );
+
+                                Map<String, Object> bookDetails = bookResponse.getBody();
+                                if (bookDetails != null && bookDetails.containsKey("works")) {
+                                    List<?> works = (List<?>) bookDetails.get("works");
+                                    if (!works.isEmpty() && works.getFirst() instanceof Map) {
+                                        @SuppressWarnings("unchecked")
+                                        Map<String, Object> firstWork = (Map<String, Object>) works.getFirst();
+                                        if (firstWork.containsKey("key")) {
+                                            workKey = (String) firstWork.get("key");
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.err.println("Error fetching book details: " + e.getMessage());
+                            }
+                        }
+
+                        if (workKey != null) {
+                            String workUrl = "https://openlibrary.org" + workKey + ".json";
+                            try {
+                                ResponseEntity<Map<String, Object>> workResponse = restTemplate.exchange(
+                                        workUrl,
+                                        HttpMethod.GET,
+                                        null,
+                                        new ParameterizedTypeReference<>() {}
+                                );
+
+                                Map<String, Object> workDetails = workResponse.getBody();
+                                if (workDetails != null) {
+                                    if (workDetails.containsKey("description")) {
+                                        Object descObj = workDetails.get("description");
+                                        String description = getDescription(descObj);
+                                        if (!description.isEmpty()) {
+                                            book.setDescription(description);
+                                        }
+                                    }
+
+                                    if (workDetails.containsKey("subjects") &&
+                                            (book.getGenre() == null || book.getGenre().length == 0)) {
+                                        List<?> subjects = (List<?>) workDetails.get("subjects");
+                                        List<String> genres = getStrings(subjects);
+                                        if (!genres.isEmpty()) {
+                                            book.setGenre(genres.toArray(new String[0]));
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.err.println("Error fetching work details: " + e.getMessage());
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error processing work info: " + e.getMessage());
+                    }
+                }
+
                 book.setApiId(generateApiIdFromKey(key));
                 book.setLastSync(LocalDateTime.now());
                 books.add(book);
             }
         }
         return books;
+    }
+
+    private static List<String> getStrings(List<?> subjects) {
+        if (subjects == null || subjects.isEmpty()) return List.of("Fiction");  // Default genre
+
+        Set<String> commonGenres = Set.of(
+                "fiction", "fantasy", "science fiction", "mystery", "thriller",
+                "romance", "historical fiction", "young adult", "adventure",
+                "horror", "biography", "non-fiction", "history", "science",
+                "philosophy", "poetry", "drama", "comedy", "classic"
+        );
+
+
+        Set<String> specificTerms = Set.of(
+                "character", "battle", "war", "ring", "magic", "wizard", "dragon", "dwarf", "elf",
+                "goblin", "troll", "spider", "hobbit", "invisibility", "eagle", "thrush",
+                "pictorial", "specimen", "translation", "movable", "graphic", "juvenile",
+                "toy", "untranslated", "motion", "arkenstone", "five armies"
+        );
+
+        List<String> priorityGenres = new ArrayList<>();
+        for (Object subject : subjects) {
+            if (subject instanceof String) {
+                String genre = ((String) subject).toLowerCase().trim();
+                if (commonGenres.contains(genre)) {
+                    priorityGenres.add(genre.substring(0, 1).toUpperCase() + genre.substring(1));
+                }
+            }
+        }
+
+        if (!priorityGenres.isEmpty()) {
+            return priorityGenres.stream().limit(3).collect(Collectors.toList());
+        }
+
+        List<String> cleanedGenres = new ArrayList<>();
+        for (Object subject : subjects) {
+            if (subject instanceof String) {
+                String genre = ((String) subject).trim();
+                String lowerGenre = genre.toLowerCase();
+
+
+                if (genre.length() <= 5) continue;
+                if (specificTerms.stream().anyMatch(lowerGenre::contains)) continue;
+                if (lowerGenre.contains("protected daisy")) continue;
+                if (lowerGenre.contains("accessible book")) continue;
+                if (lowerGenre.contains("large type books")) continue;
+                if (lowerGenre.contains("library staff")) continue;
+                if (lowerGenre.contains("texts")) continue;
+                if (lowerGenre.contains("works")) continue;
+                if (lowerGenre.contains("awards")) continue;
+                if (lowerGenre.contains("fictitious character")) continue;
+
+                cleanedGenres.add(genre);
+
+                if (cleanedGenres.size() >= 3) break;
+            }
+        }
+
+        if (!cleanedGenres.isEmpty()) {
+            return cleanedGenres;
+        }
+
+        return List.of("Fiction");
     }
 
     private String normalizeIsbn(String isbn) {
@@ -365,7 +525,7 @@ public class ApiService {
         return null;
     }
 
-    private static String getDescription(Object descObj) {
+    public static String getDescription(Object descObj) {
         if (descObj instanceof String) {
             return (String) descObj;
         } else if (descObj instanceof Map) {

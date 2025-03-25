@@ -12,6 +12,27 @@
 <body>
 <div th:insert="~{fragments :: header}"></div>
 
+<div class="searchbar-container">
+    <h2>Find another book</h2>
+    <div class="searchbar-main">
+        <form th:action="@{/search}" method="get">
+            <select name="searchType" id="typeSearch" aria-label="Search filter main">
+                <option value="title">Title</option>
+                <option value="author">Author</option>
+                <option value="isbn">ISBN</option>
+            </select>
+            <input aria-label="Search bar main" type="search" id="main-search" name="query" placeholder="Search ...">
+            <button class="search-btn-main" type="submit">
+                <i class="material-symbols-outlined">search</i>
+            </button>
+            <div class="button-separator"></div>
+            <button class="barcode-btn-main" type="button">
+                <i class="material-symbols-outlined">barcode_scanner</i>
+            </button>
+        </form>
+    </div>
+</div>
+
 <div class="search-results">
     <h1>Search Results for: <span th:text="${query}"></span></h1>
 

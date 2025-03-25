@@ -52,7 +52,7 @@ public class BookMapper {
                 .collect(Collectors.joining(", "));
     }
 
-    private String[] formatSubjects(List<OpenLibraryApi.OpenLibrarySubjectDTO> subjects) {
+    public String[] formatSubjects(List<OpenLibraryApi.OpenLibrarySubjectDTO> subjects) {
         if (subjects == null || subjects.isEmpty()) return new String[0];
         Set<String> unique = subjects.stream()
                 .map(OpenLibraryApi.OpenLibrarySubjectDTO::getName)
