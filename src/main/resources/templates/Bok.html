@@ -31,8 +31,6 @@
             </select>
         </div>
 
-
-
         <fieldset class="star-rating">
             <legend>Your rating:</legend>
             <div class="stars">
@@ -63,8 +61,6 @@
             <h3 th:text="${book.author}">Author</h3>
         </div>
 
-
-
         <div class="book-description">
             <h4>Description</h4>
             <p th:text="${book.description}">Description</p>
@@ -84,7 +80,44 @@
         </div>
     </div>
 </div>
+<div class="review-section" th:if="${user != null}">
+    <form th:action="@{/book/review}" method="post">
+        <input type="hidden" name="bookIsbn" th:value="${book.isbn}">
 
+        <div class="rating-group">
+            <label>Rating:</label>
+            <div class="star-rating">
+                <input type="radio" name="rating" value="1" id="star1" >
+                <label for="star1">★</label>
+                <input type="radio" name="rating" value="2" id="star2" >
+                <label for="star2">★</label>
+                <input type="radio" name="rating" value="3" id="star3" >
+                <label for="star3">★</label>
+                <input type="radio" name="rating" value="4" id="star4" >
+                <label for="star4">★</label>
+                <input type="radio" name="rating" value="5" id="star5" >
+                <label for="star5">★</label>
+            </div>
+        </div>
+
+        <div class="review-text-group">
+            <label for="reviewText">Your Review:</label>
+            <textarea id="reviewText"
+                      name="text"
+                      rows="4"
+                      required
+                      th:text="${review.text}"></textarea>
+        </div>
+
+        <div class="error-message" th:if="${error}" th:text="${error}"></div>
+
+        <button type="submit" class="submit-review">Submit Review</button>
+    </form>
+</div>
+
+<div class="login-prompt" th:unless="${user != null}">
+    <p>Please <a th:href="@{/login}">login</a> to write a review.</p>
+</div>
 
 <div th:insert="~{fragments :: footer}"></div>
 </body>

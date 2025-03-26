@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * review text, and an automatically generated creation timestamp
  */
 @Entity
-@Table(name = "review", schema = "betterreads")
+@Table(name = "reviews", schema = "betterreads")
 public class Review {
 
     /**
