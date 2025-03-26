@@ -32,8 +32,8 @@ main {
     align-items: center;
     background-color: var(--maincolor);
     padding: 15px 15px;
-    padding-bottom: 100px;
     position: relative;
+    border-bottom: 1px solid #cccccc;
 }
 
 .navbar h1 {
