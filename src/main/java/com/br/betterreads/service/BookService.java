@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -44,26 +46,36 @@ public class BookService {
     @Transactional
     public List<Book> searchBooksByTitle(String title) {
         List<Book> books = bookRepo.findByTitle(title);
-        if (books.isEmpty()) {
-            List<Book> apiBooks = apiService.searchBookByTitle(title);
-            if (!apiBooks.isEmpty()) {
-                bookRepo.saveAll(apiBooks);
-                return apiBooks;
-            }
-        }
-        return books;
+        List<Book> apiBooks = apiService.searchBookByTitle(title);
+
+        return getBooks(books, apiBooks);
     }
 
     @Transactional
     public List<Book> searchBooksByAuthor(String author) {
         List<Book> books = bookRepo.findBookByAuthor(author);
-        if (books.isEmpty()) {
-            List<Book> apiBooks = apiService.searchBookByAuthor(author);
-            if (!apiBooks.isEmpty()) {
-                bookRepo.saveAll(apiBooks);
-                return apiBooks;
+        List<Book> apiBooks = apiService.searchBookByAuthor(author);
+
+        return getBooks(books, apiBooks);
+    }
+
+    private List<Book> getBooks(List<Book> books, List<Book> apiBooks) {
+        if (!apiBooks.isEmpty()) {
+            Set<String> isbns = books.stream()
+                    .map(Book::getIsbn)
+                    .collect(Collectors.toSet());
+
+            List<Book> uniqueApiBooks = apiBooks.stream()
+                    .filter(book -> !isbns.contains(book.getIsbn()))
+                    .toList();
+
+            if (!uniqueApiBooks.isEmpty()) {
+                bookRepo.saveAll(uniqueApiBooks);
+                books.addAll(uniqueApiBooks);
             }
+
         }
+
         return books;
     }
 
