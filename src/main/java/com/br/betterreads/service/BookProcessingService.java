@@ -31,10 +31,9 @@ public class BookProcessingService {
     }
 
     /**
-     * Process search results from OpenLibrary, replicating original logic:
+     * Process search results from OpenLibrar:
      *  - parse documents
-     *  - deduplicate by title+author, pick best
-     *  - sort by "quality" scoring (and optional exact‐match preference)
+     *  - sort by "quality" scoring
      *  - return top 10
      */
     public List<Book> processSearchResults(Map<String, Object> apiResponse, String searchQuery) {
@@ -69,7 +68,7 @@ public class BookProcessingService {
     }
 
     /**
-     * Process a single doc into a Book, using all sub-services for data.
+     * Process a single doc into a Book
      */
     private Book processDocument(JsonNode doc) {
         Book book = new Book();
@@ -256,7 +255,7 @@ public class BookProcessingService {
         if (score1 != score2) {
             return score2 - score1;
         }
-        // If same quality, we can optionally push exact or partial matches to the front
+        // If same quality
         String sQuery = (searchQuery == null) ? "" : searchQuery.trim().toLowerCase();
         String t1 = b1.getTitle().toLowerCase();
         String t2 = b2.getTitle().toLowerCase();
@@ -282,10 +281,9 @@ public class BookProcessingService {
      */
     private int calculateBookQualityScore(Book book) {
         int score = 0;
-        // description presence
+    
         if (book.getDescription() != null && !"No description available".equals(book.getDescription())) {
             score += 10;
-            // add up to +5 more for longer descriptions (like original code did)
             score += Math.min(5, book.getDescription().length() / 100);
         }
         // multiple genres
@@ -305,7 +303,7 @@ public class BookProcessingService {
 
     /**
      * Decide if newBook is strictly better than existingBook by the same title/author.
-     * This is used for merging duplicates (like the old code).
+     * This is used for merging duplicates
      */
     private boolean isBookBetterQuality(Book newBook, Book existingBook) {
         int existingScore = 0;
