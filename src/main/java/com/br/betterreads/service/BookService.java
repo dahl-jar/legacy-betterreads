@@ -30,9 +30,10 @@ public class BookService {
 
     @Transactional
     public Book searchBookByIsbn(String isbn) {
-        Optional<Book> bookOpt = bookRepo.findByIsbn(isbn);
-        if (bookOpt.isPresent()) {
-            return bookOpt.get();
+        List<Book> books = bookRepo.findByIsbn(isbn);
+
+        if (!books.isEmpty()) {
+            return books.getFirst();
         } else {
             Book apiBook = apiService.fetchBookFromApi(isbn);
             if (apiBook != null) {
@@ -102,6 +103,7 @@ public class BookService {
             return cachedBooks.subList(0, Math.min(limit, cachedBooks.size()));
         }
 
+
         List<OpenLibraryTrendingResponse.TrendingBook> trendingBooks = apiService.fetchTrendingBooks(limit);
         if (!trendingBooks.isEmpty()) {
             bookRepo.resetTrendingFlags();
@@ -121,5 +123,7 @@ public class BookService {
         }
         return new ArrayList<>();
     }
+
+
 
 }

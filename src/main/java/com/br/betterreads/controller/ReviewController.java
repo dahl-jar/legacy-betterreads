@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class ReviewController {
 
@@ -36,7 +38,8 @@ public class ReviewController {
                          HttpSession session) {
 
         User user = userService.getLoggedInUser(session);
-        Book book = bookRepository.findByIsbn(bookIsbn).orElse(null);
+        List<Book> books = bookRepository.findByIsbn(bookIsbn);
+        Book book = books.isEmpty() ? null : books.getFirst();
         ValidationResult result = reviewService.createAndSaveReview(user, book, rating, text);
         if (!result.valid()) {
             model.addAttribute("error", result.errorMessage());

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BookController {
@@ -78,10 +79,11 @@ public class BookController {
             return "searchError";
         }
 
+
         if (loggedInUser != null) {
             model.addAttribute("user", loggedInUser);
-            Review existingReview = reviewRepository.getReviewByUserAndBook(loggedInUser, book);
-            model.addAttribute("review", existingReview != null ? existingReview : new Review());
+            Optional<Review> existingReviewOpt = Optional.ofNullable((Review) reviewRepository.getReviewByUserAndBook(loggedInUser, book));
+            model.addAttribute("review", existingReviewOpt.orElse(new Review()));
         } else {
             model.addAttribute("review", new Review());
         }

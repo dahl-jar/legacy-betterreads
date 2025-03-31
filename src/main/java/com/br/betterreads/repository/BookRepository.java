@@ -17,7 +17,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
      * @param isbn
      * @return
      */
-    Optional<Book> findByIsbn(String isbn);
+    List<Book> findByIsbn(String isbn);
 
     /**
      * @param title
