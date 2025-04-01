@@ -14,7 +14,7 @@ public class GenreService {
             "romance", "historical fiction", "young adult", "adventure", "epic fantasy",
             "biography", "non-fiction", "history", "science", "philosophy", "poetry",
             "drama", "comedy", "classic", "crime", "dystopian", "urban fantasy",
-            "paranormal", "western", "memoir", "contemporary", "literary fiction",
+            "paranormal", "western", "literary fiction",
             "suspense", "gothic", "cyberpunk", "steampunk", "mythology", "fairy tale",
             "folklore", "supernatural", "magical realism", "satire", "war", "espionage",
             "action", "short stories", "graphic novel", "coming of age", "historical",

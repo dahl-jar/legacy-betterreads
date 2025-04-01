@@ -79,7 +79,6 @@ public class BookController {
             return "searchError";
         }
 
-
         if (loggedInUser != null) {
             model.addAttribute("user", loggedInUser);
             Optional<Review> existingReviewOpt = Optional.ofNullable((Review) reviewRepository.getReviewByUserAndBook(loggedInUser, book));

@@ -31,7 +31,7 @@ public class BookProcessingService {
     }
 
     /**
-     * Process search results from OpenLibrar:
+     * Process search results from OpenLibrary:
      *  - parse documents
      *  - sort by "quality" scoring
      *  - return top 10

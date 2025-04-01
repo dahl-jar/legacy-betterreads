@@ -68,7 +68,7 @@ public class IsbnService {
     }
 
     /**
-     * Clean up ISBN to be 13 characters only [0-9X].
+     * Clean up ISBN to be 13 characters only.
      */
     public String normalizeIsbn(String isbn) {
         if (isbn == null) {

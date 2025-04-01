@@ -55,9 +55,9 @@ public class ApiService {
 
     /**
      * Fetch a single book by ISBN.
+     * Retrieve raw data, pass it into BookProcessing for final structuring
      */
     public Book fetchBookFromApi(String isbn) {
-        // Retrieve raw data, pass it into BookProcessing for final structuring
         return bookProcessingService.processBookDetails(
                 openLibraryClient.fetchBookData(isbn),
                 isbn
