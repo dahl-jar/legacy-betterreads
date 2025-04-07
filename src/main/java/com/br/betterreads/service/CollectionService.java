@@ -5,9 +5,9 @@ import com.br.betterreads.model.collection.Collection;
 import com.br.betterreads.model.collection.CollectionStatus;
 import com.br.betterreads.repository.CollectionRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,10 +36,21 @@ public class CollectionService {
     }
 
     @Transactional
-    public ValidationResult removeFromCollection(User user, Book book) {
+    public void removeFromCollection(User user, Book book) {
         Collection toDelete = collectionRepo.findCollectionByUserAndBook(user, book).orElse(null);
-        if (toDelete == null) return ValidationResult.error("Collection not found");
+        if (toDelete == null) return;
         collectionRepo.delete(toDelete);
-        return ValidationResult.success();
+    }
+
+    /**
+     * Returns a list of Collection objects based on the given user and status. Returns null if the list doesnt exist or is empty
+     * @param user User the collection belongs to
+     * @param status Status of the collection searched for
+     * @return {@link List<Collection>} of Collection or null
+     */
+    public List<Collection> getCollection(User user, CollectionStatus status) {
+        List<Collection> collection = collectionRepo.findCollectionsByUserAndStatus(user, status);
+        if (collection.isEmpty()) return null;
+        return collection;
     }
 }

@@ -111,7 +111,7 @@ public class ReviewTest {
         when(reviewRepository.getReviewByUserAndBook(user, book)).thenReturn(savedReview);
 
         reviewService.deleteReview(savedReview);
-        verify(reviewRepository).delete(any(Review.class));
+        verify(reviewRepository).delete(savedReview);
     }
 
 }

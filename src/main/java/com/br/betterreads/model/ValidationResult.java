@@ -14,7 +14,7 @@ public record ValidationResult(boolean valid, String errorMessage) {
 
     /**
      * @param errorMessage the error message to return
-     * @return invalid ValidationResult with error messade
+     * @return invalid ValidationResult with error message
      */
     public static ValidationResult error(String errorMessage) {
         return new ValidationResult(false, errorMessage);
