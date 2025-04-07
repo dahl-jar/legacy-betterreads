@@ -1,10 +1,14 @@
 package com.br.betterreads.service;
 
 import com.br.betterreads.model.*;
+import com.br.betterreads.model.collection.Collection;
+import com.br.betterreads.model.collection.CollectionStatus;
 import com.br.betterreads.repository.CollectionRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CollectionService {
@@ -16,24 +20,26 @@ public class CollectionService {
     }
 
     @Transactional
-    public ValidationResult addCollection(User user, Book book, CollectionStatus status) {
+    public ValidationResult addToCollection(User user, Book book, CollectionStatus status) {
+        Optional<Collection> existing = collectionRepo.findCollectionByUserAndBook(user, book);
+
+        if (existing.isPresent()) {
+            Collection collection = existing.get();
+            collection.setStatus(status);
+            collectionRepo.save(collection);
+            return ValidationResult.success();
+        }
+
         Collection collection = new Collection(user, book, status);
         collectionRepo.save(collection);
         return ValidationResult.success();
     }
 
     @Transactional
-    public ValidationResult addBookToCollection(Collection collection, Book book) {
-
-
-
-
+    public ValidationResult removeFromCollection(User user, Book book) {
+        Collection toDelete = collectionRepo.findCollectionByUserAndBook(user, book).orElse(null);
+        if (toDelete == null) return ValidationResult.error("Collection not found");
+        collectionRepo.delete(toDelete);
         return ValidationResult.success();
-    }
-
-    public void initCollection(@Valid User user) {
-        collectionRepo.save(new Collection(user, null, CollectionStatus.READ));
-        collectionRepo.save(new Collection(user, null, CollectionStatus.WANT_TO_READ));
-        collectionRepo.save(new Collection(user, null, CollectionStatus.CURRENTLY_READING));
     }
 }

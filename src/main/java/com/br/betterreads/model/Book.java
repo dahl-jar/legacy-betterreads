@@ -1,10 +1,13 @@
 package com.br.betterreads.model;
 
+import com.br.betterreads.model.collection.Collection;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a book in the BetterReads application.
@@ -107,6 +110,9 @@ public class Book {
     @NotNull
     @Basic(fetch = FetchType.EAGER)
     private boolean trending;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Collection> collections = new ArrayList<>();
 
 
     // Constructors

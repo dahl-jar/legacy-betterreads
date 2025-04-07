@@ -51,8 +51,6 @@ public class UserController {
             return "Signup";
         }
 
-        collectionService.initCollection(user);
-
         return "redirect:login";
     }
 

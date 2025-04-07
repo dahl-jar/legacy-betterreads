@@ -1,9 +1,14 @@
 package com.br.betterreads.model;
 
+import com.br.betterreads.model.collection.Collection;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user", schema = "betterreads")
@@ -34,6 +39,8 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Collection> collections = new ArrayList<>();
 
     //Constructors
 
