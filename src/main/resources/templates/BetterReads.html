@@ -7,7 +7,7 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap">
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" th:href="@{/hovedside.css}">
-    <script th:src="@{sidebar.js}"></script>
+    <script th:src="@{/sidebar.js}" defer></script>
 
 </head>
 <body>
@@ -58,40 +58,6 @@
     </div>
 </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const hamburger = document.getElementById("hamburger-icon");
-        const sidebar = document.querySelector(".sidebar");
-
-        hamburger.addEventListener("click", function () {
-            sidebar.classList.toggle("show-menu"); // Åpne/lukke menyen
-        });
-
-        // Klikk utenfor menyen for å lukke den
-        document.addEventListener("click", function (event) {
-            if (!sidebar.contains(event.target) && !hamburger.contains(event.target)) {
-                sidebar.classList.remove("show-menu");
-            }
-        });
-    });
-
-
-    function scrollLeft() {
-        document.querySelector(".liste").scrollBy({left: -350, behavior: "smooth"});  /* Increased from 300 to 350 */
-    }
-
-    function scrollRight() {
-        document.querySelector(".liste").scrollBy({left: 350, behavior: "smooth"});   /* Increased from 300 to 350 */
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const leftBtn = document.querySelector(".scroll-btn.left");
-        const rightBtn = document.querySelector(".scroll-btn.right");
-
-        leftBtn.addEventListener('click', scrollLeft);
-        rightBtn.addEventListener('click', scrollRight);
-    });
-</script>
 
 <div th:insert="~{fragments :: footer}"></div>
 </body>
