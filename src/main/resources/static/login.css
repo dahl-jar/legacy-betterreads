@@ -1,4 +1,5 @@
 /* Importer Google Font for en moderne stil */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 /* Generelle stiler */
@@ -16,6 +17,50 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #F5F2EB; /* Samme hovedfarge som nettsiden */
+}
+
+.signup-header {
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    text-align: center;
+}
+
+.signup-header h1 {
+    font-family: 'Roboto Slab', serif;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.signup-header h1 a {
+    text-decoration: none;
+    color: black;
+}
+
+.signup-header h1 a:hover {
+    color: #4f4f4f;
+}
+
+.signup-header .skinny {
+    font-weight: 300;
+}
+
+.signup-header .fat {
+    font-weight: 700;
+}
+
+.signup-header h1 span {
+    font-weight: bold;
+    color: #000;
+}
+
+.signup-header hr {
+    width: 80%;
+    max-width: 600px;
+    margin: 10px auto;
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
 }
 
 /* Container for login-formen */
@@ -102,4 +147,10 @@ a{
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
+}
+
+.signup-header h1 a {
+    font-family: 'Roboto Slab', serif;
+    font-size: 2rem;
+    font-weight: 400;
 }
