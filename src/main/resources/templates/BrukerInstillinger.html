@@ -7,34 +7,12 @@
     <link rel="stylesheet" href="../static/styles.css">
     <link rel="stylesheet" href="../static/Innstillinger.css">
     <link rel="stylesheet" href="../static/footer.css">
+    <script th:src="@{sidebar.js}"></script>
+
 </head>
 <body>
 <div th:insert="~{fragments :: header}"></div>
 
-<header th:fragment="header">
-    <nav class="navbar">
-        <span>&#9776;</span>
-        <h1><a href="BetterReads.html">BetterReads</a></h1>
-        <div class="sidebar">
-            <ul class="menu">
-                <li><a href="BetterReads.html">Home</a></li>
-                <li><a href="">My Books</a></li>
-                <li><a href="">Browse</a></li>
-            </ul>
-            <search class="searchbar-nav">
-                <form>
-                    <select aria-label="Search Filter Navbar" id="searchTypeNav">
-                        <option value="books">Books</option>
-                        <option value="authors">Authors</option>
-                    </select>
-                    <input aria-label="navsearch" id="navsearch" type="search" name="search" placeholder="Search...">
-                </form>
-            </search>
-        </div>
-        <a href="Signup.html">Register</a>
-        <a href="Login.html">Login</a>
-    </nav>
-</header>
 <div class="settings-container">
     <h2>Innstillinger</h2>
 

@@ -7,6 +7,8 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap">
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" th:href="@{/book.css}">
+    <script th:src="@{sidebar.js}"></script>
+
 </head>
 <body>
 <div th:insert="~{fragments :: header}"></div>
@@ -118,7 +120,7 @@
 <div class="dropdown">
     <button>Add to Collection</button>
     <div class="dropdown-content">
-        <form th:action="@{/add-to-collection}" method="post">
+        <form th:action="@{/book/collection/add}" method="post">
             <input type="hidden" name="isbn" th:value="${book.isbn}"/>
             <button type="submit" name="status" value="CURRENTLY_READING">Reading</button>
             <button type="submit" name="status" value="HAVE_READ">Have Read</button>

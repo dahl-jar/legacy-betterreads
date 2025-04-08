@@ -54,7 +54,7 @@ main {
 .navbar .auth-links {
     margin-left: auto;
     display: flex;
-    gap: 15px;
+    gap: 20px;
 }
 
 .navbar .auth-links a {

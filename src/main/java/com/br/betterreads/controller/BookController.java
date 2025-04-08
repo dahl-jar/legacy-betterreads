@@ -72,6 +72,11 @@ public class BookController {
         return "searchError";
     }
 
+    @GetMapping("/browse")
+    public String browse() {
+        return "searchResults";
+    }
+
     @GetMapping("/book")
     public String viewBook(@RequestParam String isbn, Model model, HttpSession session) {
         Book book = bookService.searchBookByIsbn(isbn);

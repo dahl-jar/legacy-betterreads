@@ -50,7 +50,9 @@ public class ReviewController {
     }
 
     @PostMapping("/book/review/delete")
-    public String deleteReview(@RequestParam String isbn) {
+    public String deleteReview(@RequestParam String isbn,
+                               @RequestParam Review review) {
+        reviewService.deleteReview(review);
         return "redirect:/book?isbn=" + isbn;
     }
 

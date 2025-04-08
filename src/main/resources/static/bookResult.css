@@ -1,12 +1,81 @@
-.search-results-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
+.searchbar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    min-height: 30vh;
 }
 
-.search-results-container h1 {
+.searchbar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.searchbar-container h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    padding-bottom: 5px;
     text-align: center;
-    margin-bottom: 20px;
+}
+
+.searchbar-main {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    width: 30%;
+    min-width: 400px;
+    margin: 0 auto;
+}
+
+.searchbar-main form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.searchbar-main select,
+.searchbar-main input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px 0 0 5px;
+}
+
+.searchbar-main select {
+    background: #f0f0f0;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.searchbar-main input {
+    flex: 1;
+}
+
+.search-btn-main,
+.barcode-btn-main {
+    background: inherit;
+    color: #787878;
+    border: none;
+    padding: 0 0.8em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn-main:hover,
+.barcode-btn-main:hover {
+    color: #000000;
+}
+
+.searchbar-main i {
+    font-size: 20px;
 }
 
 .search-results {
