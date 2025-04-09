@@ -50,6 +50,13 @@ public class UserService {
         return ValidationResult.success();
     }
 
+    /**
+     * Validates user input during registration
+     * @param email email used during registration
+     * @param password password used during registration
+     * @param session {@link HttpSession}
+     * @return {@link ValidationResult}
+     */
     public ValidationResult validateUser(String email, String password, HttpSession session){
 
         if(email == null || email.isBlank()){

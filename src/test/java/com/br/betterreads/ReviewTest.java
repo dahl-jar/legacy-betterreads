@@ -97,7 +97,7 @@ public class ReviewTest {
         String newText = "Updated review text";
 
         ValidationResult result = reviewService.updateReview(existingReview, newRating, newText);
-
+        System.out.println(result.errorMessage());
         assertTrue(result.valid());
         verify(reviewRepository).save(existingReview);
         assertEquals(newRating, existingReview.getRating());

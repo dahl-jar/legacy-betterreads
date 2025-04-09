@@ -54,16 +54,11 @@ public class CollectionController {
     }
 
     @PostMapping("/book/collection/remove")
-    public String removeBookFromCollection(@RequestParam String isbn, HttpSession session, RedirectAttributes ra) {
+    public String removeBookFromCollection(@RequestParam String isbn, HttpSession session) {
         User user = userService.getLoggedInUser(session);
         Book book = bookRepository.findByIsbn(isbn).getFirst();
 
         collectionService.removeFromCollection(user, book);
         return "redirect:/book?isbn=" + isbn;
     }
-
-    private boolean bookIsInCollection(Book book, User user) {
-        return collectionRepository.findCollectionByUserAndBook(user, book).isPresent();
-    }
-
 }

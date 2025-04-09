@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+/**
+ * Service for managing {@link Review}
+ */
 @Service
 public class ReviewService {
 
@@ -31,6 +35,14 @@ public class ReviewService {
         return ValidationResult.success();
     }
 
+    /**
+     * Creates a new review for a book
+     * @param user reviewer
+     * @param book book getting reviewed
+     * @param rating reviewers rating 1 - 5
+     * @param text review text
+     * @return {@link ValidationResult}
+     */
     @Transactional
     public ValidationResult createAndSaveReview(User user, Book book, int rating, String text) {
         Review review = new Review(user, book, rating, text);
@@ -41,23 +53,54 @@ public class ReviewService {
         return result;
     }
 
+    /**
+     * Updates a review.
+     * @param review review to update
+     * @param newRating the new rating
+     * @param newText the new text
+     * @return {@link ValidationResult}
+     */
     @Transactional
     public ValidationResult updateReview(Review review, int newRating, String newText) {
         Review oldReview = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
 
         oldReview.setRating(newRating);
         oldReview.setText(newText);
-
         reviewRepo.save(oldReview);
 
         return ValidationResult.success();
     }
 
+    /**
+     * Deletes a review
+     * @param review review to delete
+     */
     @Transactional
     public void deleteReview(Review review) {
         Review toDelete = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
         if (toDelete == null) return;
         reviewRepo.delete(toDelete);
+    }
+
+    /**
+     * Get the average rating on a book based on user reviews.
+     * @param book Book to fetch reviews from
+     * @return Average rating of the book
+     */
+    public double getAvgRating(Book book) {
+        List<Review> reviews = reviewRepo.findByBook(book);
+        if (reviews.isEmpty()) return 0;
+        return reviews.stream().mapToDouble(Review::getRating).sum() / reviews.size();
+    }
+
+    /**
+     * Get the amount of reviews for a given book
+     * @param book Book to fetch reviews from
+     * @return number of reviews
+     */
+    public int getAmountOfReviews(Book book) {
+        List<Review> reviews = reviewRepo.findByBook(book);
+        return reviews.size();
     }
 
 }

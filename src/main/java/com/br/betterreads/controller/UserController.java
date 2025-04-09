@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -78,6 +79,12 @@ public class UserController {
             return "Login";
         }
 
+        String origin = (String) session.getAttribute("redirectUrl");
+        if (origin != null) {
+            session.removeAttribute("redirectUrl");
+            return "redirect:" + origin;
+        }
+
         return "redirect:/";
 
     }
@@ -96,7 +103,7 @@ public class UserController {
             model.addAttribute("user", loggedInUser);
         }
 
-        List<Book> trendingBooks = bookService.displayTrending(12);
+        List<Book> trendingBooks = bookService.displayTrending(24);
         model.addAttribute("books", trendingBooks);
         return "BetterReads";
     }

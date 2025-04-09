@@ -1,0 +1,353 @@
+.book-container {
+    margin: auto;
+}
+
+.rating {
+    margin-top: 10px;
+}
+
+.star-outer {
+    position: relative;
+    display: inline-block;
+    font-size: 2em;
+}
+
+.star-outer::before {
+    content: "☆☆☆☆☆";
+    color: #cccccc;
+}
+
+.star-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 20%;
+}
+
+.star-inner::before {
+    content: "★★★★★";
+    color: #f8ce0b;
+}
+
+.rating-value {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.review-count {
+    font-size: 12px;
+    color: #666;
+}
+
+.description {
+    max-width: 600px;
+}
+
+/* Review form styling */
+.write-review {
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.review-form {
+    max-width: 600px;
+}
+
+.star-rating {
+    margin-bottom: 15px;
+}
+
+.rating-selector {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating-selector input {
+    display: none;
+}
+
+.rating-selector label {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.rating-selector label:hover,
+.rating-selector label:hover ~ label,
+.rating-selector input:checked ~ label {
+    color: #f8ce0b;
+}
+
+.review-content {
+    margin-bottom: 15px;
+}
+
+.review-content textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+}
+
+.submit-review {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-review:hover {
+    background-color: #45a049;
+}
+
+
+.book-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 50px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.left {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.right {
+    flex: 1;
+    min-width: 300px;
+}
+
+
+.cover img {
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.left > div {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Main dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 70%;
+    text-align: center;
+}
+
+/* Main dropdown button */
+.dropdown > button {
+    width: 100%;
+    padding: 10px;
+    background-color: #f5f2eb;
+    border: 2px solid #ccc; /* Adding border */
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: border-radius 0.2s ease;
+}
+
+.dropdown > button:hover {
+    background-color: rgba(176,173,166,0.63);
+}
+
+/* Change border radius when hovering over dropdown */
+.dropdown:hover > button {
+    border-radius: 4px 4px 0 0;
+    border-bottom: none;
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+    position: absolute;
+    background-color: #f5f2eb;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    border: 2px solid #ccc; /* Matching border */
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+}
+
+.dropdown-content form {
+    width: 100%;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 300px;
+    pointer-events: auto;
+}
+
+/* Style the dropdown option buttons */
+.dropdown-content button {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background-color: #f5f2eb;
+    color: black;
+    text-align: left;
+    cursor: pointer;
+    margin: 0;
+}
+
+.dropdown-content button:hover {
+    background-color: rgba(176,173,166,0.63);
+}
+
+/* Remove border from last button */
+.dropdown-content button:last-child {
+    border-bottom: none;
+}
+
+.remove-from-collection button {
+    width: 100%;
+    padding: 10px;
+    background-color: #f5f2eb;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.remove-from-collection button:hover {
+    background-color: rgba(176,173,166,0.63);
+}
+
+.write-review {
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+
+.existing-review {
+    margin-top: 30px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    max-width: 600px;
+}
+
+.user-rating {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.review-date {
+    color: #666;
+    font-size: 14px;
+}
+
+.user-review-text {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.delete-review {
+    background-color: #f38ba8;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-review:hover {
+    background-color: #eba0ac;
+}
+
+.all-reviews {
+    margin-top: 40px;
+    border-top: 2px solid #ccc;
+    padding-top: 20px;
+    max-height: 800px;
+    overflow: scroll;
+}
+
+.review-item {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.reviewer-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.all-reviews .review-content {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.right {
+    flex: 2;
+    min-width: 300px;
+}
+
+.far-right {
+    width: 300px;
+    min-width: 300px;
+}
+
+@media (max-width: 1200px) {
+    .book-container {
+        flex-direction: column;
+    }
+
+    .left, .right, .far-right {
+        width: 100%;
+    }
+}

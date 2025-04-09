@@ -5,6 +5,7 @@ import com.br.betterreads.model.Review;
 import com.br.betterreads.model.User;
 import com.br.betterreads.model.ValidationResult;
 import com.br.betterreads.repository.BookRepository;
+import com.br.betterreads.repository.ReviewRepository;
 import com.br.betterreads.service.ReviewService;
 import com.br.betterreads.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -23,11 +24,13 @@ public class ReviewController {
     private final UserService userService;
     private final BookRepository bookRepository;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
-    public ReviewController(UserService userService, BookRepository bookRepository, ReviewService reviewService) {
+    public ReviewController(UserService userService, BookRepository bookRepository, ReviewService reviewService, ReviewRepository reviewRepository) {
         this.userService = userService;
         this.bookRepository = bookRepository;
         this.reviewService = reviewService;
+        this.reviewRepository = reviewRepository;
     }
 
     @PostMapping("/book/review/create")
@@ -51,15 +54,26 @@ public class ReviewController {
 
     @PostMapping("/book/review/delete")
     public String deleteReview(@RequestParam String isbn,
-                               @RequestParam Review review) {
+                               @RequestParam String reviewId) {
+       Review review = reviewRepository.getReviewByReviewId(Long.parseLong(reviewId));
         reviewService.deleteReview(review);
         return "redirect:/book?isbn=" + isbn;
     }
 
     @PostMapping("/book/review/update")
     public String updateReview(@RequestParam String isbn,
-                               RedirectAttributes ra,
-                               HttpSession session) {
+                               @RequestParam Review review,
+                               @RequestParam String updatedText,
+                               @RequestParam int updatedRating,
+                               RedirectAttributes ra) {
+
+        if(updatedText.isBlank()) {
+            ra.addFlashAttribute("error", "Invalid review text");
+        }
+        review.setText(updatedText);
+        review.setRating(updatedRating);
+
+
         return "redirect:/book?isbn=" + isbn;
     }
 

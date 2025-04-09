@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for managing {@link Collection}
+ */
 @Service
 public class CollectionService {
 
@@ -19,6 +22,13 @@ public class CollectionService {
         this.collectionRepo = collectionRepo;
     }
 
+    /**
+     * Add a book to a users' collection. If the book already is in a collection change its status
+     * @param user Collection owner
+     * @param book Book to add
+     * @param status Users status for the book
+     * @return {@link ValidationResult}
+     */
     @Transactional
     public ValidationResult addToCollection(User user, Book book, CollectionStatus status) {
         Optional<Collection> existing = collectionRepo.findCollectionByUserAndBook(user, book);
@@ -35,6 +45,11 @@ public class CollectionService {
         return ValidationResult.success();
     }
 
+    /**
+     * Removes a given book from a users' collection. If the collection isn't found the method does nothing
+     * @param user User owning the collection
+     * @param book Book to remove
+     */
     @Transactional
     public void removeFromCollection(User user, Book book) {
         Collection toDelete = collectionRepo.findCollectionByUserAndBook(user, book).orElse(null);

@@ -1,7 +1,7 @@
 package com.br.betterreads.model;
 
 /**
- * Helper class for validation results at signup / login
+ * Helper class for validating inputs and methods
  */
 public record ValidationResult(boolean valid, String errorMessage) {
 

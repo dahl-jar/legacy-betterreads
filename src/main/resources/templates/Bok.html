@@ -6,131 +6,164 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap">
     <link rel="stylesheet" th:href="@{/styles.css}">
-    <link rel="stylesheet" th:href="@{/book.css}">
+    <link rel="stylesheet" th:href="@{/nBook.css}">
     <script th:src="@{/sidebar.js}"></script>
 
 </head>
 <body>
 <div th:insert="~{fragments :: header}"></div>
+<div class="book-container">
 
-<div class="book-content">
-
-    <div class="book-left">
-        <div class="book-cover">
-            <img th:if="${book.coverURL != null && !book.coverURL.isEmpty()}"
-                 th:src="@{${book.coverURL}}" alt="Book cover">
-            <img th:unless="${book.coverURL != null && !book.coverURL.isEmpty()}"
-                 th:src="@{/images/template.avif}" alt="No cover available">
+    <div class="left">
+        <div class="cover">
+            <img th:if="${book.getCoverURL() != null && !book.getCoverURL().isEmpty()}" th:src="${book.getCoverURL()}"
+                 th:alt="${book.getTitle()}">
+            <img th:unless="${book.getCoverURL() != null && !book.getCoverURL().isEmpty()}"
+                 th:src="@{/images/template.avif}" th:alt="No cover available">
         </div>
-
-
-        <div class="book-status">
-            <label for="bookStatus">Book Status:</label>
-            <select id="bookStatus" name="bookStatus" required aria-label="Book Status">
-                <option value="read">Read</option>
-                <option value="currently-reading">Currently Reading</option>
-                <option value="to-read">To Read</option>
-            </select>
-        </div>
-
-        <fieldset class="star-rating">
-            <legend>Your rating:</legend>
-            <div class="stars">
-
-                <input type="radio" name="rating" value="1" id="rating1" />
-                <label for="rating1">&#9733;</label>
-
-                <input type="radio" name="rating" value="2" id="rating2" />
-                <label for="rating2">&#9733;</label>
-
-                <input type="radio" name="rating" value="3" id="rating3" />
-                <label for="rating3">&#9733;</label>
-
-                <input type="radio" name="rating" value="4" id="rating4" />
-                <label for="rating4">&#9733;</label>
-
-                <input type="radio" name="rating" value="5" id="rating5" />
-                <label for="rating5">&#9733;</label>
+        <div class="rating">
+            <div class="star-outer">
+                <div class="star-inner" th:style="'width: ' + ${(avgRating / 5.0) * 100.0} + '%'"></div>
             </div>
-        </fieldset>
+            <span class="rating-value" th:text="${#numbers.formatDecimal(avgRating, 1, 1)} + '/5'"></span>
+            <span class="review-count" th:text="${reviewCount} + ' reviews'"></span>
+        </div>
+
+        <div class="login-prompt" th:if="${user == null}">
+            <p>Please log in to write a review or add to your collection.</p>
+            <p>You can log in <a th:href="@{/login}">here</a>.</p>
+        </div>
+        <div class="dropdown" th:if="${user != null && inCollection == null}">
+            <button>Add to Collection</button>
+            <div class="dropdown-content">
+                <form th:action="@{/book/collection/add}" method="post">
+                    <input type="hidden" name="isbn" th:value="${book.isbn}"/>
+                    <button type="submit" name="status" value="CURRENTLY_READING">Reading</button>
+                    <button type="submit" name="status" value="HAVE_READ">Have Read</button>
+                    <button type="submit" name="status" value="WANT_TO_READ">Want to Read</button>
+                </form>
+            </div>
+        </div>
+        <p th:if="${inCollection != null}">This book is in your collection with status: <span
+                th:text="${inCollection.status.formattedName}"></span></p>
+        <div class="dropdown" th:if="${user != null && inCollection != null}">
+            <button>Change Status</button>
+            <div class="dropdown-content">
+                <form th:action="@{/book/collection/add}" method="post">
+                    <input type="hidden" name="isbn" th:value="${book.isbn}"/>
+                    <button type="submit" name="status" value="CURRENTLY_READING">Reading</button>
+                    <button type="submit" name="status" value="HAVE_READ">Have Read</button>
+                    <button type="submit" name="status" value="WANT_TO_READ">Want to Read</button>
+                </form>
+            </div>
+        </div>
+        <div class="remove-from-collection" th:if="${user != null && inCollection != null}">
+            <form th:action="@{/book/collection/remove}" method="post">
+                <input type="hidden" name="isbn" th:value="${book.isbn}"/>
+                <button type="submit">Remove from collection</button>
+            </form>
+        </div>
     </div>
 
-
-    <div class="book-info">
+    <div class="right">
         <div class="book-header">
             <h1 th:text="${book.title}">Book Title</h1>
             <h2 th:if="${book.subtitle}" th:text="${book.subtitle}">Subtitle</h2>
-            <h3 th:text="${book.author}">Author</h3>
+            <h3 th:text="${book.author} ? ${book.author} : 'Unknown Author'">Author</h3>
         </div>
-
-        <div class="book-description">
+        <div class="description">
             <h4>Description</h4>
-            <p th:text="${book.description}">Description</p>
+            <p th:text="${book.description == null ? 'No description available' : book.description}">Description</p>
+        </div>
+        <div th:if="${book.genre != null && #arrays.length(book.genre) > 0}" class="genre">
+            <h4 th:text="${#arrays.length(book.genre) == 1 ? 'Genre' : 'Genres'}">Genres</h4>
+            <span th:text="${#strings.arrayJoin(book.genre, ' ')}"></span>
         </div>
 
-        <p th:if="${book.genre != null && #arrays.length(book.genre) > 0}">
-            <strong>Genre:</strong> <span th:text="${#strings.arrayJoin(book.genre, ', ')}">Genre</span>
-        </p>
-        <p th:if="${book.publicationYear}">
-            <strong>Publication Year:</strong> <span th:text="${book.publicationYear}">Year</span>
-        </p>
+        <div class="write-review" th:if="${user != null && existingReview.createdAt == null}">
+            <h4>Write a Review</h4>
+            <form th:action="@{/book/review/create}" method="post" class="review-form">
+                <input type="hidden" name="isbn" th:value="${book.isbn}"/>
 
-        <div class="user-review">
-            <label for="userReview">Your Review</label>
-            <textarea id="userReview" name="userReview" rows="4"></textarea>
-            <button type="submit">Submit Review</button>
+                <div class="star-rating">
+                    <p>Your Rating:</p>
+                    <div class="rating-selector">
+                        <input type="radio" id="star5" name="rating" value="5" required>
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+
+                <div class="review-content">
+                    <label for="reviewText">Your Review:</label>
+                    <textarea id="reviewText" name="text" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-review">Submit Review</button>
+            </form>
         </div>
-    </div>
-</div>
-<div class="review-section" th:if="${user != null}">
-    <form th:action="@{/book/review/create}" method="post">
-        <input type="hidden" name="bookIsbn" th:value="${book.isbn}">
 
-        <div class="rating-group">
-            <label>Rating:</label>
-            <div class="star-rating">
-                <input type="radio" name="rating" value="1" id="star1" >
-                <label for="star1">★</label>
-                <input type="radio" name="rating" value="2" id="star2" >
-                <label for="star2">★</label>
-                <input type="radio" name="rating" value="3" id="star3" >
-                <label for="star3">★</label>
-                <input type="radio" name="rating" value="4" id="star4" >
-                <label for="star4">★</label>
-                <input type="radio" name="rating" value="5" id="star5" >
-                <label for="star5">★</label>
+        <div class="existing-review" th:if="${user != null && existingReview.createdAt != null}">
+            <h4>Your Review</h4>
+
+            <div class="user-rating">
+                <div class="star-outer">
+                    <div class="star-inner" th:style="'width:' + ${(existingReview.rating / 5.0) * 100.0} + '%'"></div>
+                </div>
+                <span class="rating-value" th:text="${existingReview.rating} + '/5'"></span>
+                <span class="review-date" th:text="${#temporals.format(existingReview.createdAt, 'dd-MM-yyyy')}"></span>
+            </div>
+
+            <div class="user-review-text">
+                <p th:text="${existingReview.text}"></p>
+            </div>
+
+            <div class="review-actions">
+                <form th:action="@{/book/review/delete}" method="post" style="display: inline;">
+                    <input type="hidden" name="reviewId" th:value="${existingReview.reviewId}"/>
+                    <input type="hidden" name="isbn" th:value="${book.isbn}"/>
+                    <button type="submit" class="delete-review">Delete Review</button>
+                </form>
             </div>
         </div>
-
-        <div class="review-text-group">
-            <label for="reviewText">Your Review:</label>
-            <textarea id="reviewText"
-                      name="text"
-                      rows="4"
-                      required
-                      th:text="${review.text}"></textarea>
-        </div>
-
-        <div class="error-message" th:if="${error}" th:text="${error}"></div>
-
-        <button type="submit" class="submit-review">Submit Review</button>
-    </form>
-</div>
-
-<div class="dropdown">
-    <button>Add to Collection</button>
-    <div class="dropdown-content">
-        <form th:action="@{/book/collection/add}" method="post">
-            <input type="hidden" name="isbn" th:value="${book.isbn}"/>
-            <button type="submit" name="status" value="CURRENTLY_READING">Reading</button>
-            <button type="submit" name="status" value="HAVE_READ">Have Read</button>
-            <button type="submit" name="status" value="WANT_TO_READ">Want to Read</button>
-        </form>
     </div>
-</div>
+    <div class="far-right">
+        <h3>All Reviews</h3>
+        <div class="all-reviews">
 
-<div class="login-prompt" th:unless="${user != null}">
-    <p>Please <a th:href="@{/login}">login</a> to write a review.</p>
+            <div class="review-item" th:each="review : ${reviews}"
+                 th:unless="${user != null && user.userId == review.user.userId}">
+                <span class="reviewer-name" th:text="${review.user.username}">Reviewer</span>
+                <div class="review-header">
+                    <div class="review-rating">
+                        <div class="star-outer">
+                            <div class="star-inner" th:style="'width:' + ${(review.rating / 5.0) * 100.0} + '%'"></div>
+                        </div>
+                        <span class="rating-value"
+                              th:text="${#numbers.formatDecimal(review.rating, 0, 0)} + '/5'"></span>
+                    </div>
+                    <span class="review-date" th:text="${#temporals.format(review.createdAt, 'dd-MM-yyyy')}"></span>
+                </div>
+
+                <div class="review-content">
+                    <p th:text="${review.text}">Review text</p>
+                </div>
+            </div>
+
+            <div th:if="${reviews.size() == 1 && user != null && reviews[0].user.userId == user.userId}">
+                <p>No other reviews yet. Be the first to review!</p>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <div th:insert="~{fragments :: footer}"></div>

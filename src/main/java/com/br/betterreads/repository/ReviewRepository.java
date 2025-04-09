@@ -14,4 +14,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Review getReviewByUserAndBook(@NotNull User user, @NotNull Book book);
 
     List<Review> findByBook(Book book);
+
+    Review getReviewByReviewId(long l);
 }

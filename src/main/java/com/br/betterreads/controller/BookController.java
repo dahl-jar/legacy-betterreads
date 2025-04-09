@@ -3,11 +3,13 @@ package com.br.betterreads.controller;
 import com.br.betterreads.model.Book;
 import com.br.betterreads.model.Review;
 import com.br.betterreads.model.User;
+import com.br.betterreads.model.collection.Collection;
 import com.br.betterreads.repository.BookRepository;
 import com.br.betterreads.repository.CollectionRepository;
 import com.br.betterreads.repository.ReviewRepository;
 import com.br.betterreads.service.ApiService;
 import com.br.betterreads.service.BookService;
+import com.br.betterreads.service.ReviewService;
 import com.br.betterreads.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -27,15 +29,17 @@ public class BookController {
     private final UserService userService;
     private final ReviewRepository reviewRepository;
     private final CollectionRepository collectionRepository;
+    private final ReviewService reviewService;
 
 
-    public BookController(BookService bookService, ApiService apiService, BookRepository bookRepo, UserService userService, ReviewRepository reviewRepository, CollectionRepository collectionRepository) {
+    public BookController(BookService bookService, ApiService apiService, BookRepository bookRepo, UserService userService, ReviewRepository reviewRepository, CollectionRepository collectionRepository, ReviewService reviewService) {
         this.bookService = bookService;
         this.apiService = apiService;
         this.bookRepo = bookRepo;
         this.userService = userService;
         this.reviewRepository = reviewRepository;
         this.collectionRepository = collectionRepository;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/search")
@@ -88,20 +92,29 @@ public class BookController {
         }
 
         List<Review> reviews = reviewRepository.findByBook(book);
-        model.addAttribute("reviews", reviews);
+        if(!reviews.isEmpty()) {
+            model.addAttribute("reviews", reviews);
+        }
+
+        double avgRating = reviewService.getAvgRating(book);
+        model.addAttribute("avgRating", avgRating);
+
+        int reviewCount = reviews.size();
+        model.addAttribute("reviewCount", reviewCount);
 
         if (loggedInUser != null) {
             model.addAttribute("user", loggedInUser);
 
-            boolean inCollection = collectionRepository.findCollectionByUserAndBook(loggedInUser, book).isPresent();
+            Collection inCollection = collectionRepository.findCollectionByUserAndBook(loggedInUser, book).orElse(null);
             model.addAttribute("inCollection", inCollection);
 
             Optional<Review> existingReviewOpt = Optional.ofNullable((Review) reviewRepository.getReviewByUserAndBook(loggedInUser, book));
-            model.addAttribute("review", existingReviewOpt.orElse(new Review()));
+            model.addAttribute("existingReview", existingReviewOpt.orElse(new Review()));
         } else {
             model.addAttribute("review", new Review());
         }
 
+        session.setAttribute("redirectUrl", "/book?isbn=" + isbn);
         String cUrl = book.getCoverURL();
         book.setCoverURL(cUrl.replace("-M", "-L"));
         model.addAttribute("book", book);
