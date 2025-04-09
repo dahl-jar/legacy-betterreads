@@ -157,8 +157,11 @@
                 </div>
             </div>
 
-            <div th:if="${reviews.size() == 1 && user != null && reviews[0].user.userId == user.userId}">
-                <p>No other reviews yet. Be the first to review!</p>
+            <div th:if="${reviews != null && reviews.size() == 1 && user != null && reviews[0].user.userId == user.userId}">
+                <p>No other reviews yet.</p>
+            </div>
+            <div th:if="${reviews == null || reviews.isEmpty()}">
+                <p>No reviews yet. Be the first to review!</p>
             </div>
         </div>
     </div>
