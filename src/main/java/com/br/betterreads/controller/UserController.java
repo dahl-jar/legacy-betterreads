@@ -1,10 +1,8 @@
 package com.br.betterreads.controller;
 
 import com.br.betterreads.model.*;
-import com.br.betterreads.service.ApiService;
-import com.br.betterreads.service.BookService;
-import com.br.betterreads.service.CollectionService;
-import com.br.betterreads.service.UserService;
+import com.br.betterreads.repository.ReviewRepository;
+import com.br.betterreads.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -20,16 +18,19 @@ import java.util.List;
 @Controller
 public class UserController {
 
+
     private final UserService userService;
     private final BookService bookService;
     private final ApiService apiService;
     private final CollectionService collectionService;
+    private final ReviewRepository reviewRepository;
 
-    public UserController(UserService userService, BookService bookService, ApiService apiService, CollectionService collectionService) {
+    public UserController(UserService userService, BookService bookService, ApiService apiService, CollectionService collectionService, ReviewRepository reviewRepository) {
         this.userService = userService;
         this.bookService = bookService;
         this.apiService = apiService;
         this.collectionService = collectionService;
+        this.reviewRepository = reviewRepository;
     }
 
     @GetMapping("/signup")
@@ -116,7 +117,7 @@ public class UserController {
             model.addAttribute("user", loggedInUser);
         }
 
-        return "Bruker";
+        return "redirect:/user/profile";
     }
 
     /**
@@ -140,6 +141,24 @@ public class UserController {
         model.addAttribute("user", loggedInUser);
 
         return "brukerbokliste";
+    }
+
+
+    @GetMapping("/user/profile")
+    public String showUserProfile(Model model, HttpSession session) {
+        User user = userService.getLoggedInUser(session);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", user);
+
+        List<Review> userReviews = reviewRepository.findByUser(user);
+        model.addAttribute("userReviews", userReviews);
+        assert userReviews != null;
+        model.addAttribute("reviewCount", userReviews.size());
+
+        return "Bruker";
     }
 
 }

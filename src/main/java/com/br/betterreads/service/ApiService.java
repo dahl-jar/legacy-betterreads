@@ -2,12 +2,16 @@ package com.br.betterreads.service;
 
 import com.br.betterreads.model.Book;
 import com.br.betterreads.model.OpenLibraryTrendingResponse;
+import com.br.betterreads.util.BookMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -65,7 +69,8 @@ public class ApiService {
     }
 
     /**
-     * Fetch trending books (weekly).
+     * Fetches trending books from OpenLibrary API
+     * @return List of trending books
      */
     public List<OpenLibraryTrendingResponse.TrendingBook> fetchTrendingBooks(int limit) {
         String apiUrl = "https://openlibrary.org/trending/weekly.json?limit=" + limit;
@@ -84,6 +89,7 @@ public class ApiService {
         return response.getBody().getWorks();
     }
 
+
     /**
      * Fetch the description for a given work ID (e.g. “/works/OL1234W”).
      */
@@ -92,5 +98,6 @@ public class ApiService {
                 openLibraryClient.fetchWorkDetails(workId)
         );
     }
+
 
 }

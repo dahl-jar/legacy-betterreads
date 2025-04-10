@@ -65,7 +65,6 @@ public class CollectionService {
      */
     public List<Collection> getCollection(User user, CollectionStatus status) {
         List<Collection> collection = collectionRepo.findCollectionsByUserAndStatus(user, status);
-        if (collection.isEmpty()) return null;
-        return collection;
+        return collection.isEmpty() ? List.of() : collection;
     }
 }

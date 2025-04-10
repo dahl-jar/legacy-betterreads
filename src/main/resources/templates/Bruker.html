@@ -20,28 +20,83 @@
 
         <img th:src="${'/images/default-profile.png'}" alt="Profile Picture" class="profile-pic">
         <p><strong>Bio:</strong> <span th:text="${'No bio available'}"></span></p>
-        <p><strong>Total Reviews:</strong> <span th:text="${ 0}"></span></p>
+        <p><strong>Total Reviews:</strong> <span th:text="${reviewCount}"></span></p>
         <p><strong>Joined:</strong> <span th:text="${user.created_at}"></span></p>
+
     </div>
 
     <div class="reviews-box">
         <h3>Your reviews</h3>
-        <div class="review-content">
-            <img src="/images/book-placeholder.png" alt="Book Cover" class="book-image">
-            <div class="review-text">
-                <div class="stars">⭐ ⭐ ⭐ ☆ ☆</div>
-                <p>Great pacing, but the plot was predictable...</p>
+        <div th:if="${userReviews != null && !userReviews.isEmpty()}">
+            <div class="review-content" th:each="review : ${userReviews}">
+                <img th:src="${review.book.coverURL}" th:alt="${review.book.title}" class="book-image">
+                <div class="review-text">
+                    <div class="stars">
+                        <div class="star-outer">
+                            <div class="star-inner" th:style="'width:' + ${(review.rating / 5.0) * 100.0} + '%'"></div>
+                        </div>
+                        <span class="rating-value" th:text="${review.rating} + '/5'"></span>
+                    </div>
+                    <p th:text="${review.text}"></p>
+                    <a th:href="@{/book(isbn=${review.book.isbn})}" class="view-book">View Book</a>
+                </div>
             </div>
         </div>
-        <div class="arrow-down">⬇</div>
+        <div th:if="${userReviews == null || userReviews.isEmpty()}" class="no-reviews">
+            <p>You haven't written any reviews yet.</p>
+        </div>
     </div>
-
     <div class="container2">
-        <h3><span th:text="${user.username}"></span>'s shelves</h3>
-        <a th:href="@{userBooklist}">My book list</a>
+        <h3>My Book Collection</h3>
+        <a th:href="@{/user/booklist}" class="collection-button">View My Book Collection</a>
     </div>
 </div>
 
 <div th:insert="~{fragments :: footer}"></div>
+
+<style>
+    .collection-button {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 15px;
+        background-color: #1d7484;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .collection-button:hover {
+        background-color: #155b69;
+        cursor: pointer;
+    }
+
+    .container1 {
+        background-color: #f9f7f4;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .reviews-box {
+        background-color: #f9f7f4;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .container2 {
+        background-color: #f9f7f4;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    h2, h3 {
+        color: #1d7484;
+    }
+</style>
 </body>
 </html>

@@ -1,20 +1,31 @@
 package com.br.betterreads.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class OpenLibraryTrendingResponse {
 
-
     private List<TrendingBook> works;
 
-    public List<TrendingBook> getWorks() {return works;}
-    public void setWorks(List<TrendingBook> works) {this.works = works;}
+    public List<TrendingBook> getWorks() {
+        return works;
+    }
+
+    public void setWorks(List<TrendingBook> works) {
+        this.works = works;
+    }
 
     public static class TrendingBook {
         private String key;
         private String title;
+
+        @JsonProperty("authors")
         private List<String> author_name;
+
+        @JsonProperty("publish_date")
         private Integer first_published_year;
+
+        @JsonProperty("cover")
         private Integer cover_i;
 
         public String getKey() {
@@ -57,12 +68,18 @@ public class OpenLibraryTrendingResponse {
             this.cover_i = cover_i;
         }
 
+        public String getWorkId() {
+            if (key != null && key.startsWith("/works/")) {
+                return key;
+            }
+            return key;
+        }
+
         public String getCoverUrl() {
-            if(cover_i !=null) {
+            if (cover_i != null) {
                 return "https://covers.openlibrary.org/b/id/" + cover_i + "-M.jpg";
             }
-            return "https://www.nypl.org/scout/_next/image?url=https%3A%2F%2Fdrupal.nypl.org%2Fsites-drupal%2Fdefault%2Ffiles%2Fstyles%2Fmax_width_960%2Fpublic%2Fblogs%2FJ5LVHEL.jpg%3Fitok%3DDkMp1Irh&w=3840&q=90";
+            return "/images/template.avif";
         }
     }
-
 }

@@ -29,7 +29,10 @@ public class ReviewService {
         if (review == null) return new ValidationResult(false, "Review doesnt exist");
         if(review.getUser() == null) return new ValidationResult(false, "You must be logged in to make reviews");
         if(review.getBook() == null) return new ValidationResult(false, "Book doesnt exist");
-        if(reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook()) != null) return new ValidationResult(false, "You have already reviewed this book");
+
+        List<Review> existingReviews = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
+        if(!existingReviews.isEmpty()) return new ValidationResult(false, "You have already reviewed this book");
+
         if(review.getRating() < 0) return new ValidationResult(false, "Please rate the book");
         if(review.getText() == null || review.getText().isBlank()) return new ValidationResult(false, "Review text is empty");
         return ValidationResult.success();
@@ -62,8 +65,12 @@ public class ReviewService {
      */
     @Transactional
     public ValidationResult updateReview(Review review, int newRating, String newText) {
-        Review oldReview = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
+        List<Review> reviews = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
+        if (reviews.isEmpty()) {
+            return new ValidationResult(false, "Review not found");
+        }
 
+        Review oldReview = reviews.get(0);
         oldReview.setRating(newRating);
         oldReview.setText(newText);
         reviewRepo.save(oldReview);
@@ -71,14 +78,18 @@ public class ReviewService {
         return ValidationResult.success();
     }
 
+
+
     /**
      * Deletes a review
      * @param review review to delete
      */
     @Transactional
     public void deleteReview(Review review) {
-        Review toDelete = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
-        if (toDelete == null) return;
+        List<Review> reviews = reviewRepo.getReviewByUserAndBook(review.getUser(), review.getBook());
+        if (reviews.isEmpty()) return;
+
+        Review toDelete = reviews.getFirst();
         reviewRepo.delete(toDelete);
     }
 
@@ -102,5 +113,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepo.findByBook(book);
         return reviews.size();
     }
+
+
 
 }

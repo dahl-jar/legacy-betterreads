@@ -47,7 +47,7 @@ public class GenreService {
     /**
      * Determine genres from a raw List<?> (like from “subjects” in a work details map).
      */
-    public String[] determineGenres(List<?> rawSubjects) {
+    public static String[] determineGenres(List<?> rawSubjects) {
         if (rawSubjects == null || rawSubjects.isEmpty()) return new String[]{"Fiction"};
         List<String> subjects = rawSubjects.stream()
                 .filter(obj -> obj instanceof String)
@@ -56,7 +56,7 @@ public class GenreService {
         return processSubjects(subjects).toArray(new String[0]);
     }
 
-    private List<String> processSubjects(List<String> subjects) {
+    private static List<String> processSubjects(List<String> subjects) {
         Set<String> result = new LinkedHashSet<>();
         for (String subject : subjects) {
             if (shouldExclude(subject)) {
@@ -79,11 +79,11 @@ public class GenreService {
         return result.stream().limit(5).collect(Collectors.toList());
     }
 
-    private boolean shouldExclude(String subject) {
+    private static boolean shouldExclude(String subject) {
         return EXCLUSION_TERMS.stream().anyMatch(subject::contains);
     }
 
-    private String capitalize(String input) {
+    private static String capitalize(String input) {
         if (input == null || input.isEmpty()) return input;
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }

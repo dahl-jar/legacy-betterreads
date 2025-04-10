@@ -12,6 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -40,6 +43,9 @@ public class ReviewTest {
 
     @Test
     void createReview() {
+        when(reviewRepository.getReviewByUserAndBook(any(User.class), any(Book.class)))
+                .thenReturn(Collections.emptyList());
+
         ValidationResult result = reviewService.createAndSaveReview(user, book, rating, reviewText);
         assertTrue(result.valid());
         verify(reviewRepository).save(any(Review.class));
@@ -61,7 +67,9 @@ public class ReviewTest {
 
     @Test
     void createReview_alreadyReviewed() {
-        when(reviewRepository.getReviewByUserAndBook(user, book)).thenReturn(new Review(user, book, rating, reviewText));
+        Review existingReview = new Review(user, book, rating, reviewText);
+        when(reviewRepository.getReviewByUserAndBook(user, book))
+                .thenReturn(List.of(existingReview));
 
         ValidationResult result = reviewService.createAndSaveReview(user, book, rating, reviewText);
 
@@ -72,6 +80,9 @@ public class ReviewTest {
     @Test
     void createReview_InvalidRating() {
         rating = -1;
+        when(reviewRepository.getReviewByUserAndBook(any(User.class), any(Book.class)))
+                .thenReturn(Collections.emptyList());
+
         ValidationResult result = reviewService.createAndSaveReview(user, book, rating, reviewText);
         assertFalse(result.valid());
         assertEquals("Please rate the book", result.errorMessage());
@@ -79,6 +90,9 @@ public class ReviewTest {
 
     @Test
     void createReview_InvalidReviewText() {
+        when(reviewRepository.getReviewByUserAndBook(any(User.class), any(Book.class)))
+                .thenReturn(Collections.emptyList());
+
         ValidationResult result = reviewService.createAndSaveReview(user, book, rating, null);
         assertFalse(result.valid());
         assertEquals("Review text is empty", result.errorMessage());
@@ -91,13 +105,14 @@ public class ReviewTest {
     @Test
     void updateReview() {
         Review existingReview = new Review(user, book, rating, reviewText);
-        when(reviewRepository.getReviewByUserAndBook(user, book)).thenReturn(existingReview);
+        when(reviewRepository.getReviewByUserAndBook(user, book))
+                .thenReturn(List.of(existingReview));
 
         int newRating = 4;
         String newText = "Updated review text";
 
         ValidationResult result = reviewService.updateReview(existingReview, newRating, newText);
-        System.out.println(result.errorMessage());
+
         assertTrue(result.valid());
         verify(reviewRepository).save(existingReview);
         assertEquals(newRating, existingReview.getRating());
@@ -106,12 +121,11 @@ public class ReviewTest {
 
     @Test
     void deleteReview() {
-
         Review savedReview = new Review(user, book, rating, reviewText);
-        when(reviewRepository.getReviewByUserAndBook(user, book)).thenReturn(savedReview);
+        when(reviewRepository.getReviewByUserAndBook(user, book))
+                .thenReturn(List.of(savedReview));
 
         reviewService.deleteReview(savedReview);
-        verify(reviewRepository).delete(savedReview);
+        verify(reviewRepository).delete(any(Review.class));
     }
-
 }

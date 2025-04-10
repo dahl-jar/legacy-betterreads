@@ -9,31 +9,40 @@
 .star-outer {
     position: relative;
     display: inline-block;
-    font-size: 2em;
+    font-family: 'Font Awesome 5 Free', serif;
+    font-size: 20px;
 }
 
 .star-outer::before {
-    content: "☆☆☆☆☆";
-    color: #cccccc;
+    content: "\2605\2605\2605\2605\2605";
+    color: #ccc;
+    letter-spacing: 3px;
 }
 
 .star-inner {
     position: absolute;
     top: 0;
     left: 0;
+    white-space: nowrap;
     overflow: hidden;
-    width: 20%;
+    width: 0;
 }
 
 .star-inner::before {
-    content: "★★★★★";
+    content: "\2605\2605\2605\2605\2605";
     color: #f8ce0b;
+    letter-spacing: 3px;
 }
 
 .rating-value {
-    font-size: 18px;
+    margin-left: 10px;
     font-weight: bold;
-    margin-top: 5px;
+}
+
+.review-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
 }
 
 .review-count {

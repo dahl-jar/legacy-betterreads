@@ -109,8 +109,8 @@ public class BookController {
             Collection inCollection = collectionRepository.findCollectionByUserAndBook(loggedInUser, book).orElse(null);
             model.addAttribute("inCollection", inCollection);
 
-            Optional<Review> existingReviewOpt = Optional.ofNullable((Review) reviewRepository.getReviewByUserAndBook(loggedInUser, book));
-            model.addAttribute("existingReview", existingReviewOpt.orElse(new Review()));
+            List<Review> userReviews = reviewRepository.getReviewByUserAndBook(loggedInUser, book);
+            model.addAttribute("existingReview", !userReviews.isEmpty() ? userReviews.get(0) : new Review());
         } else {
             model.addAttribute("review", new Review());
         }

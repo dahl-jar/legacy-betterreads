@@ -11,9 +11,11 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Review getReviewByUserAndBook(@NotNull User user, @NotNull Book book);
+    List<Review> getReviewByUserAndBook(@NotNull User user, @NotNull Book book);
 
     List<Review> findByBook(Book book);
+
+    List<Review> findByUser(User user);
 
     Review getReviewByReviewId(long l);
 }
