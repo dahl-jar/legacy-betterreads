@@ -86,5 +86,23 @@ public class UserService {
         return (User) session.getAttribute("loggedInUser");
     }
 
+    @Transactional
+    public ValidationResult addBio(HttpSession session, String bio){
+        User user = getLoggedInUser(session);
+        if(user == null) return ValidationResult.error("User not found");
+        if(bio == null || bio.isBlank()) return ValidationResult.error("Bio cannot be empty");
+        user.setBio(bio);;
+        userRepo.save(user);
+        return ValidationResult.success();
+    }
 
+
+    @Transactional
+    public ValidationResult removeBio(HttpSession session) {
+        User user = getLoggedInUser(session);
+        if(user == null) return ValidationResult.error("User not found");
+        user.setBio(null);
+        userRepo.save(user);
+        return ValidationResult.success();
+    }
 }
