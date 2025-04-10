@@ -31,7 +31,7 @@ public class GenreService {
             "character", "battle", "seasons", "kings and rulers", "winter", "invierno",
             "imaginary wars", "imaginary places", "award winner", "bestseller",
             "new york times", "courts and courtiers", "civil war", "good and evil",
-            "bien y mal"
+            "bien y mal", "nyt:", "hardcover-fiction", "bestseller list", "bestseller-", "bestsellers"
     );
 
     /**
@@ -80,7 +80,11 @@ public class GenreService {
     }
 
     private static boolean shouldExclude(String subject) {
-        return EXCLUSION_TERMS.stream().anyMatch(subject::contains);
+        if (EXCLUSION_TERMS.stream().anyMatch(subject::contains)) {
+            return true;
+        }
+
+        return subject.matches(".*[=:].*");
     }
 
     private static String capitalize(String input) {

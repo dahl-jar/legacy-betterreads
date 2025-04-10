@@ -73,14 +73,14 @@ public class BookService {
                 bookRepo.saveAll(uniqueApiBooks);
                 books.addAll(uniqueApiBooks);
             }
-
         }
 
-        return books;
+        return apiService.deduplicateBooks(books);
     }
 
     @Transactional
     public List<Book> searchBooks(String query, String searchType) {
+
         return switch (searchType) {
             case "title" -> searchBooksByTitle(query);
             case "author" -> searchBooksByAuthor(query);

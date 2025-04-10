@@ -77,7 +77,7 @@
         </div>
         <div th:if="${book.genre != null && #arrays.length(book.genre) > 0}" class="genre">
             <h4 th:text="${#arrays.length(book.genre) == 1 ? 'Genre' : 'Genres'}">Genres</h4>
-            <span th:text="${#strings.arrayJoin(book.genre, ' ')}"></span>
+            <span th:text="${#strings.arrayJoin(book.genre, ', ')}"></span>
         </div>
 
         <div class="write-review" th:if="${user != null && existingReview.createdAt == null}">

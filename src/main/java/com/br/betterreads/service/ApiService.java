@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -97,6 +98,40 @@ public class ApiService {
         return bookProcessingService.extractWorkDescription(
                 openLibraryClient.fetchWorkDetails(workId)
         );
+    }
+
+    List<Book> deduplicateBooks(List<Book> books) {
+        Map<String, List<Book>> booksByTitleAuthor = books.stream()
+                .collect(Collectors.groupingBy(book ->
+                        (book.getTitle() != null ? book.getTitle().toLowerCase() : "") + "|" +
+                                (book.getAuthor() != null ? book.getAuthor().toLowerCase() : "")
+                ));
+
+        return booksByTitleAuthor.values().stream()
+                .map(this::selectBestEdition)
+                .collect(Collectors.toList());
+    }
+
+    private Book selectBestEdition(List<Book> editions) {
+        for (Book book : editions) {
+            if (book.getGenre() != null && book.getGenre().length > 0 &&
+                    book.getDescription() != null && !book.getDescription().isEmpty()) {
+                return book;
+            }
+        }
+
+        for (Book book : editions) {
+            if (book.getDescription() != null && !book.getDescription().isEmpty()) {
+                return book;
+            }
+        }
+
+        for (Book book : editions) {
+            if (book.getGenre() != null && book.getGenre().length > 0) {
+                return book;
+            }
+        }
+        return editions.getFirst();
     }
 
 
