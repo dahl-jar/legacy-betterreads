@@ -39,6 +39,9 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Size(max = 300)
+    private String bio;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Collection> collections = new ArrayList<>();
 
@@ -103,5 +106,13 @@ public class User {
 
     public LocalDateTime getCreated_at() {
         return createdAt;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getBio() {
+        return bio;
     }
 }

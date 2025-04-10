@@ -5,9 +5,9 @@
     <title>User Profile</title>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,barcode_scanner,chevron_left,chevron_right,qr_code_scanner,search&display=swap">
+    <link rel="stylesheet" th:href="@{/Bruker.css}">
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" th:href="@{/hovedside.css}">
-    <link rel="stylesheet" th:href="@{/Bruker.css}">
     <script th:src="@{/sidebar.js}"></script>
 
 </head>
@@ -18,10 +18,10 @@
     <div class="container1">
         <h2>Welcome, <span th:text="${user.username}"></span>!</h2>
 
-        <img th:src="${'/images/default-profile.png'}" alt="Profile Picture" class="profile-pic">
+        <img th:src="${'/images/profile_picture.webp'}" alt="Profile Picture" class="profile-pic">
         <p><strong>Bio:</strong> <span th:text="${'No bio available'}"></span></p>
         <p><strong>Total Reviews:</strong> <span th:text="${reviewCount}"></span></p>
-        <p><strong>Joined:</strong> <span th:text="${user.created_at}"></span></p>
+        <p><strong>Joined:</strong> <span th:text="${#temporals.format(user.created_at, 'dd-MM-yyyy')}"></span></p>
 
     </div>
 

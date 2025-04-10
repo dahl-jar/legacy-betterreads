@@ -8,10 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -116,13 +114,32 @@ public class UserController {
         if (loggedInUser != null) {
             model.addAttribute("user", loggedInUser);
         }
+        model.addAttribute("user", new User("test", "test@example.com", ""));
 
         return "redirect:/user/profile";
     }
 
+    @PostMapping("/user/bio/create")
+    public String createBio(@Valid @ModelAttribute("user") User user, @RequestParam String bioText, HttpSession session, RedirectAttributes ra) {
+        ValidationResult result = userService.addBio(session, bioText);
+        if (!result.valid()) {
+            ra.addFlashAttribute("error", result.errorMessage());
+        }
+        return "redirect:/user";
+    }
+
+    @PostMapping("/user/bio/remove")
+    public String removeBio(@Valid @ModelAttribute("user") User user, HttpSession session, RedirectAttributes ra) {
+        ValidationResult result = userService.removeBio(session);
+        if (!result.valid()) {
+            ra.addFlashAttribute("error", result.errorMessage());
+        }
+        return "redirect:/user";
+    }
+
     /**
      * Handles GET-request to /userBooklist and displays the logged-in users book lsit
-     *
+     * <p>
      * Retrieves the logged-in user and adds it to the model
      * If no user is logged in, it redirects to
      *
@@ -131,10 +148,10 @@ public class UserController {
      * @return
      */
     @GetMapping("/userBooklist")
-    public String showBooklist(Model model, HttpSession session){
+    public String showBooklist(Model model, HttpSession session) {
         User loggedInUser = userService.getLoggedInUser(session);
 
-        if(loggedInUser == null){
+        if (loggedInUser == null) {
             return "redirect:/login";
         }
 
