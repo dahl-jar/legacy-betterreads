@@ -23,10 +23,10 @@
         </div>
         <div class="rating">
             <div class="star-outer">
-                <div class="star-inner" th:style="'width: ' + ${(avgRating / 5.0) * 100.0} + '%'"></div>
+                <div class="star-inner" th:style="'width: ' + ${avgRating != null ? (avgRating / 5.0) * 100.0 : 0} + '%'"></div>
             </div>
-            <span class="rating-value" th:text="${#numbers.formatDecimal(avgRating, 1, 1)} + '/5'"></span>
-            <span class="review-count" th:text="${reviewCount} + ' reviews'"></span>
+            <span class="rating-value" th:text="${avgRating != null ? #numbers.formatDecimal(avgRating, 1, 1) : '0'} + '/5'"></span>
+            <span class="review-count" th:text="${reviewCount != null ? reviewCount : '0'} + ' reviews'"></span>
         </div>
 
         <div class="login-prompt" th:if="${user == null}">
@@ -80,7 +80,7 @@
             <span th:text="${#strings.arrayJoin(book.genre, ', ')}"></span>
         </div>
 
-        <div class="write-review" th:if="${user != null && existingReview.createdAt == null}">
+        <div class="write-review" th:if="${user != null && (existingReview == null || existingReview.createdAt == null)}">
             <h4>Write a Review</h4>
             <form th:action="@{/book/review/create}" method="post" class="review-form">
                 <input type="hidden" name="isbn" th:value="${book.isbn}"/>
@@ -110,14 +110,14 @@
             </form>
         </div>
 
-        <div class="existing-review" th:if="${user != null && existingReview.createdAt != null}">
+        <div class="existing-review" th:if="${user != null && existingReview != null && existingReview.createdAt != null}">
             <h4>Your Review</h4>
 
             <div class="user-rating">
                 <div class="star-outer">
-                    <div class="star-inner" th:style="'width:' + ${(existingReview.rating / 5.0) * 100.0} + '%'"></div>
+                    <div class="star-inner" th:style="'width:' + ${existingReview.rating != null ? (existingReview.rating / 5.0) * 100.0 : 0} + '%'"></div>
                 </div>
-                <span class="rating-value" th:text="${existingReview.rating} + '/5'"></span>
+                <span class="rating-value" th:text="${existingReview.rating != null ? existingReview.rating : '0'} + '/5'"></span>
                 <span class="review-date" th:text="${#temporals.format(existingReview.createdAt, 'dd-MM-yyyy')}"></span>
             </div>
 
@@ -144,10 +144,9 @@
                 <div class="review-header">
                     <div class="review-rating">
                         <div class="star-outer">
-                            <div class="star-inner" th:style="'width:' + ${(review.rating / 5.0) * 100.0} + '%'"></div>
+                            <div class="star-inner" th:style="'width:' + ${review.rating != null ? (review.rating / 5.0) * 100.0 : 0} + '%'"></div>
                         </div>
-                        <span class="rating-value"
-                              th:text="${#numbers.formatDecimal(review.rating, 0, 0)} + '/5'"></span>
+                        <span class="rating-value" th:text="${review.rating != null ? #numbers.formatDecimal(review.rating, 0, 0) : '0'} + '/5'"></span>
                     </div>
                     <span class="review-date" th:text="${#temporals.format(review.createdAt, 'dd-MM-yyyy')}"></span>
                 </div>

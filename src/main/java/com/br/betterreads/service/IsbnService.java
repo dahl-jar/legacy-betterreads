@@ -74,7 +74,9 @@ public class IsbnService {
         if (isbn == null || isbn.trim().isEmpty()) {
             return generateFallbackIsbn();
         }
+
         String cleaned = isbn.replaceAll("[^0-9X]", "");
+
         if (cleaned.length() == 13) {
             return cleaned;
         }
@@ -90,7 +92,7 @@ public class IsbnService {
             return isbn13Base + checkDigit;
         }
 
-        if (cleaned.length() > 8) {
+        if (cleaned.length() >= 8) {
             return cleaned;
         }
 

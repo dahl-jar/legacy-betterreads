@@ -24,7 +24,7 @@ public class apisecondtest {
 
     @Test
     void testSearchBookByTitleWithDescription() {
-        List<Book> books = apiService.searchBookByTitle("The last wish");
+        List<Book> books = apiService.searchBookByTitle("The eye of the world");
 
 
         assertFalse(books.isEmpty());
