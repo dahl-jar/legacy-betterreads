@@ -34,3 +34,9 @@ build/
 
 ### Environment ###
 .env
+
+### macOS ###
+.DS_Store
+
+### Tooling ###
+.playwright-cli/

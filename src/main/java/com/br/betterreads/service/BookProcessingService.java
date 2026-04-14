@@ -45,32 +45,38 @@ public class BookProcessingService {
         if (docs == null || !docs.isArray()) {
             return Collections.emptyList();
         }
-        Map<String, Book> uniqueBooks = new ConcurrentHashMap<>();
-        List<Book> rawBooks = StreamSupport.stream(docs.spliterator(), true)
-                .map(this::processDocument)
+        Map<String, ScoredBook> uniqueBooks = new ConcurrentHashMap<>();
+        List<ScoredBook> rawBooks = StreamSupport.stream(docs.spliterator(), true)
+                .map(this::processDocumentWithoutEnhance)
                 .filter(Objects::nonNull)
                 .toList();
-        for (Book book : rawBooks) {
+        for (ScoredBook sb : rawBooks) {
+            Book book = sb.book();
             String compositeKey = (book.getTitle().toLowerCase() + "||" + book.getAuthor().toLowerCase());
-            if (!uniqueBooks.containsKey(compositeKey)) {
-                uniqueBooks.put(compositeKey, book);
-            } else {
-                Book existing = uniqueBooks.get(compositeKey);
-                if (isBookBetterQuality(book, existing)) {
-                    uniqueBooks.put(compositeKey, book);
-                }
+            ScoredBook existing = uniqueBooks.get(compositeKey);
+            if (existing == null || isBookBetterQuality(book, existing.book())) {
+                uniqueBooks.put(compositeKey, sb);
             }
         }
-        List<Book> sorted = new ArrayList<>(uniqueBooks.values());
-        sorted.sort((b1, b2) -> compareBookQuality(b1, b2, searchQuery));
+        List<ScoredBook> sorted = new ArrayList<>(uniqueBooks.values());
+        sorted.sort((s1, s2) -> compareBookQuality(s1.book(), s2.book(), searchQuery));
 
-        return sorted.stream().limit(10).collect(Collectors.toList());
+        List<ScoredBook> top = sorted.stream().limit(10).toList();
+        top.parallelStream().forEach(sb -> {
+            if (sb.workKey() != null) {
+                enhanceWithWorkDetails(sb.book(), sb.workKey());
+            }
+        });
+        return top.stream().map(ScoredBook::book).collect(Collectors.toList());
     }
 
+    private record ScoredBook(Book book, String workKey) {}
+
     /**
-     * Process a single doc into a Book
+     * Parse a single doc into a Book. Does not call Open Library for work details —
+     * enrichment is deferred to the caller so it runs only on the top-N results.
      */
-    private Book processDocument(JsonNode doc) {
+    private ScoredBook processDocumentWithoutEnhance(JsonNode doc) {
         Book book = new Book();
         book.setTitle(doc.path("title").asText("Unknown Title"));
         book.setDescription(DescriptionHelper.getDescription(doc.get("description")));
@@ -83,7 +89,6 @@ public class BookProcessingService {
         }
         book.setPublicationYear(doc.path("first_publish_year").asInt(0));
 
-
         String isbn = isbnService.extractIsbn(doc);
         book.setIsbn(isbn);
 
@@ -92,10 +97,6 @@ public class BookProcessingService {
         }
 
         String workKey = OpenLibraryUtil.extractWorkKey(doc);
-        if (workKey != null) {
-            enhanceWithWorkDetails(book, workKey);
-        }
-
 
         book.setSubtitle("");
 
@@ -104,7 +105,8 @@ public class BookProcessingService {
         book.setApiId(generateApiIdFromKey(keyForApi));
 
         book.setLastSync(LocalDateTime.now());
-        return sanitizeBook(book);
+        Book sanitized = sanitizeBook(book);
+        return sanitized == null ? null : new ScoredBook(sanitized, workKey);
     }
 
     /**

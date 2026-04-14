@@ -19,13 +19,13 @@ public class OpenLibraryTrendingResponse {
         private String key;
         private String title;
 
-        @JsonProperty("authors")
+        @JsonProperty("author_name")
         private List<String> author_name;
 
-        @JsonProperty("publish_date")
+        @JsonProperty("first_publish_year")
         private Integer first_published_year;
 
-        @JsonProperty("cover")
+        @JsonProperty("cover_i")
         private Integer cover_i;
 
         public String getKey() {
