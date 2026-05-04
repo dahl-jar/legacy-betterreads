@@ -1,5 +1,7 @@
 # BetterReads
 
+> **Archived.** This was a school group project. The solo rebuild lives at [dahl-jar/betterreads](https://github.com/dahl-jar/betterreads).
+
 A Goodreads-style book tracking web app — search, review, and organize your reading. School project built with Spring Boot and the Open Library API.
 
 ![BetterReads home page](docs/home.png)
